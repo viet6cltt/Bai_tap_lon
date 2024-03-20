@@ -1,0 +1,20 @@
+﻿  Enemy1.cpp
+E:\Game\GameSDL\GameSDL2\GameObject.h(19,7): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'Enemy1.cpp')
+  
+E:\Game\GameSDL\GameSDL2\GameObject.h(20,7): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'Enemy1.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Enemy1.cpp(35,94): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Enemy1.cpp(35,73): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Enemy1.cpp(59,65): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Enemy1.cpp(59,44): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Enemy1.cpp(106,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Enemy1.cpp(106,29): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Enemy1.cpp(116,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Enemy1.cpp(116,29): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Enemy1.cpp(172,58): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Enemy1.cpp(172,41): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Enemy1.cpp(176,59): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Enemy1.cpp(176,41): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  GameSDL2.vcxproj -> E:\Game\GameSDL\GameSDL2\x64\Debug\GameSDL2.exe
