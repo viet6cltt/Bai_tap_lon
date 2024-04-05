@@ -139,6 +139,7 @@
     <ClCompile Include="CollisionHandler.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Enemy1.cpp" />
+    <ClCompile Include="Enemy_Boss1.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameOverState.cpp" />
     <ClCompile Include="GameStateMachine.cpp" />
@@ -150,6 +151,9 @@
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="PlayState.cpp" />
+    <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="Skill_Hasagi.cpp" />
+    <ClCompile Include="SpecialAbiliyState.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Warrior.cpp" />
@@ -161,6 +165,7 @@
     <ClInclude Include="CollisionHandler.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Enemy1.h" />
+    <ClInclude Include="Enemy_Boss1.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameOverState.h" />
@@ -176,6 +181,9 @@
     <ClInclude Include="PlayState.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="RigidBody.h" />
+    <ClInclude Include="Skill.h" />
+    <ClInclude Include="Skill_Hasagi.h" />
+    <ClInclude Include="SpecialAbiliyState.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />

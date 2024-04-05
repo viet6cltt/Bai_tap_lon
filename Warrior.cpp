@@ -12,7 +12,7 @@
 Warrior::Warrior(Properties* props) : Character(props)
 {
 
-	m_Health = 2000;
+	m_Health = 1000;
 	m_Damage = 40;
 
 	m_IsRunning = false;
@@ -22,8 +22,14 @@ Warrior::Warrior(Properties* props) : Character(props)
 
 	m_IsUp = false;
 	m_IsDown = false;
+	center = new SDL_Point;
+	center->x = 56;
+	center->y = m_Height / 2;
 
 	m_Flip = SDL_FLIP_NONE;
+
+	m_skill_Dao_Pha_Thien_Mon = false;
+	
 
 	m_Collider = new Collider();
 	
@@ -34,6 +40,7 @@ Warrior::Warrior(Properties* props) : Character(props)
 	m_Animation = new Animation();
 
 	//m_attackCollider = new Collider();
+	m_isSkill_Hasagi = false;
 
 	
 
@@ -41,21 +48,20 @@ Warrior::Warrior(Properties* props) : Character(props)
 
 void Warrior::Draw()
 {
-	m_Animation->Draw(m_Transform->X, m_Transform->Y, m_Width, m_Height, m_Flip);
+	m_Animation->Draw(m_Transform->X, m_Transform->Y, m_Width, m_Height, m_Flip,center);
 	//Vector2D cam = Camera::GetInstance()->GetPosition();
 	SDL_Rect box = m_Collider->Get();
-	
 	if (m_attackCollider != NULL){
 		SDL_Rect box1 = m_attackCollider->Get();
-		//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box1);
+		SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box1);
+	}
+	if (m_skill_Hasagi != NULL) {
+		m_skill_Hasagi->Draw();
 	}
 	
-
 	//box.x -= cam.X;
 	//box.y -= cam.Y;
-	//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
-
-	
+	SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
 }
 
 
@@ -70,10 +76,26 @@ void Warrior::Update(float dt)
 	m_IsRunning = false;
 	m_IsCrouching = false;
 
-	m_Animation->SetProps("player_idle", 1, 10, 100);
+	//m_Animation->SetProps("player_idle", 1, 10, 100);
 	m_RigidBody->UnSetForce();
 
-	//running
+	if (m_isSkill_Hasagi) {
+		m_skill_Hasagi = new Skill_Hasagi(new Properties("skill_1", m_Transform->X + 40, m_Transform->Y, 64, 64), m_Damage);
+		m_skill_Hasagi->Activate(m_Position, Engine::GetInstance()->getMouse());
+		std::cout << m_Position.X << " " << m_Position.Y << std::endl;
+		//std::cout << Engine::GetInstance()->getMouse().X << " " << Engine::GetInstance()->getMouse().Y << std::endl;
+		m_isSkill_Hasagi = false;
+	}
+	if (m_skill_Hasagi != NULL) {
+		if (m_skill_Hasagi->IsDeleted()) {
+			delete m_skill_Hasagi;
+			m_skill_Hasagi = NULL;
+		}
+		else {
+			m_skill_Hasagi->Update(dt);
+		}
+	}
+
 	if (Input::GetInstance()->GetAxisKey(HORIZONTAL) == FORWARD) {
 		m_RigidBody->ApplyForceX(FORWARD * RUN_FORCE);
 		m_Flip = SDL_FLIP_NONE;
@@ -192,14 +214,16 @@ Collider* Warrior::AttackZone(float dt)
 
 void Warrior::AnimationState()
 {
-	m_Animation->SetProps("player_idle", 1, 10, 100); //idle
+	m_Animation->SetProps("player_idle", 1, 10, 100,10); //idle
 
 	//running
-	if (m_IsRunning) m_Animation->SetProps("player_run", 1, 10, 100);
+	if (m_IsRunning) m_Animation->SetProps("player_run", 1, 10, 100,10);
 	////crouch
 	//if(m_IsCrouching) m_Animation->SetProps("player_crouch", 1, 1, 100);
 	//attacking
-	if (m_IsAttacking) m_Animation->SetProps("player_attack", 1, 4, 100);
+	if (m_IsAttacking) m_Animation->SetProps("player_attack", 1, 4, 100,10);
+
+	if (m_skill_Dao_Pha_Thien_Mon) m_Animation->SetProps("skillDao_Pha_Thien_Mon", 1, 4, 100, 4);
 }
 
 
@@ -207,7 +231,6 @@ void Warrior::Clean()
 {
 	TextureManager::GetInstance()->Clean();
 }
-
 
 
 

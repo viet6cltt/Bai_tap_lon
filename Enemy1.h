@@ -2,7 +2,7 @@
 #include "Enemy.h"
 #include "HealthBar.h"
 #define ATTACK_TIME 70.0f
-#define RUN_FORCE 2.0f
+#define RUN_FORCE 0.50f
 
 class Enemy1 : public Enemy
 {
@@ -22,7 +22,7 @@ public:
 	virtual void SetAttack() override {
 		m_HasAttackedPostCollision = true;
 	}
-	virtual void ResetAttack() override{
+	virtual void ResetAttack() override {
 		m_HasAttackedPostCollision = false;
 	}
 
@@ -33,12 +33,19 @@ public:
 
 	virtual bool isAlive() override { return m_Health > 0; }
 
-	virtual void receiveDamage(int damage) override{
+	virtual void receiveDamage(int damage) override {
 		m_Health -= damage;
-		printf("%d\n", m_Health);
+		//printf("%d\n", m_Health);
+	}
+	virtual void Follow_Warrior(Vector2D F);
+
+	virtual Vector2D getPosition() override {
+		return m_Position;
 	}
 
-	
+	virtual void setFollowDirection(Vector2D F) {
+		m_FollowDirection = F;
+	}
 
 private:
 	bool m_IsRunning;
@@ -52,7 +59,7 @@ private:
 
 	float m_AttackTime;
 	bool m_CanAttack;
-	
+
 	HealthBar* m_HealthBar;
 	Collider* m_attackCollider;
 
@@ -61,9 +68,14 @@ private:
 	Animation* m_Animation;
 	RigidBody* m_RigidBody;
 
+	Vector2D m_Position;
 	int m_Health;
 	int m_Damage;
 
 	SDL_Rect m_Rect;
+	Vector2D m_FollowDirection;
+	Vector2D m_Direction;
+
+	SDL_Point* center;
 };
 

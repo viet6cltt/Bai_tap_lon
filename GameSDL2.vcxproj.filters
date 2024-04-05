@@ -69,6 +69,18 @@
     <ClCompile Include="Enemy1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy_Boss1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialAbiliyState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill_Hasagi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -147,6 +159,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Enemy1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Boss1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialAbiliyState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill_Hasagi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

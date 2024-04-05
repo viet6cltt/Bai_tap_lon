@@ -32,8 +32,10 @@ public:
 	virtual Collider* AttackZone(float dt) = 0;
 
 	virtual Collider* getCollider() = 0;
+	virtual void Follow_Warrior(Vector2D F) = 0;
 
 	virtual bool isAlive() = 0;
+	virtual void setFollowDirection(Vector2D F) = 0;
 private:
 	bool m_IsRunning;
 
@@ -54,5 +56,7 @@ private:
 	int m_Damage;
 
 	SDL_Rect m_Rect;
+
+	
 };
 

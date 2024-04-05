@@ -56,6 +56,7 @@ int Input::GetAxisKey(Axis axis)
 	default:
 		return 0;
 	}
+	return 0;
 }
 bool Input::GetLeftMouseButton()
 {

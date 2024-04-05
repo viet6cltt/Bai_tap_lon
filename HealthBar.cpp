@@ -13,14 +13,25 @@ HealthBar::HealthBar(Properties* props, int maxHealth) : GameObject(props), m_Ma
 
 void HealthBar::Draw() {
     
-    TextureManager::GetInstance()->Draw(m_Name, m_Rect.x, m_Rect.y, m_Rect.w, m_Rect.h);
+    //TextureManager::GetInstance()->Draw(m_Name, m_Rect.x, m_Rect.y, m_Rect.w, m_Rect.h);
+    if (m_Name == "none_bar") {
+        SDL_Rect healthBar;
+        healthBar.x = m_Rect.x ;
+        healthBar.y = m_Rect.y ;
+        healthBar.w = m_Rect.w * percent; // Chiều rộng của thanh máu phụ thuộc vào lượng máu còn lại
+        healthBar.h = m_Rect.h;
+        TextureManager::GetInstance()->Draw("player_fullhealth", healthBar.x, healthBar.y, healthBar.w, healthBar.h);
+        TextureManager::GetInstance()->Draw(m_Name, m_Rect.x, m_Rect.y, m_Rect.w, m_Rect.h);
+
+        return;
+    }
     
     // Tạo một hình chữ nhật đại diện cho thanh máu
     SDL_Rect healthBar;
     healthBar.x = m_Rect.x;
-    healthBar.y = m_Rect.y + 1 ;
+    healthBar.y = m_Rect.y  ;
     healthBar.w = m_Rect.w * percent; // Chiều rộng của thanh máu phụ thuộc vào lượng máu còn lại
-    healthBar.h = m_Rect.h - 3;
+    healthBar.h = m_Rect.h ;
 
     
     SDL_SetRenderDrawColor(Engine::GetInstance()->GetRenderer(), 255, 0, 0, 255);

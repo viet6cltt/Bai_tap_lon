@@ -13,6 +13,8 @@
 #include "Engine.h"
 #include "Enemy1.h"
 #include "Enemy.h"
+#include "Enemy_Boss1.h"
+
 
 class PlayState : public GameState
 {
@@ -23,6 +25,7 @@ public:
 	virtual bool OnExit();
 
 	void SpawnEnemy();
+	Vector2D FollowWarrior(Enemy* enemy);
 
 	virtual std::string getStateID() const { return s_playID; }
 private:

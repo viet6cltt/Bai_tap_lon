@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL.h>
+#include "Vector2D.h"
 
 class Collider {
 public:
@@ -15,6 +16,12 @@ public:
 			w - m_Buffer.w,
 			h - m_Buffer.h
 		};
+	}
+	inline Vector2D GetPosition() {
+		Vector2D m_Position;
+		m_Position.X = m_Box.x;
+		m_Position.Y = m_Box.y;
+		return m_Position;
 	}
 
 private:

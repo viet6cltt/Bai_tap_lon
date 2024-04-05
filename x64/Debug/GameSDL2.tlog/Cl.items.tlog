@@ -2,6 +2,7 @@ E:\Game\GameSDL\GameSDL2\Animation.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\Animat
 E:\Game\GameSDL\GameSDL2\CollisionHandler.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\CollisionHandler.obj
 E:\Game\GameSDL\GameSDL2\Enemy.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\Enemy.obj
 E:\Game\GameSDL\GameSDL2\Enemy1.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\Enemy1.obj
+E:\Game\GameSDL\GameSDL2\Enemy_Boss1.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\Enemy_Boss1.obj
 E:\Game\GameSDL\GameSDL2\Engine.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\Engine.obj
 E:\Game\GameSDL\GameSDL2\GameOverState.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\GameOverState.obj
 E:\Game\GameSDL\GameSDL2\GameStateMachine.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\GameStateMachine.obj
@@ -13,6 +14,9 @@ E:\Game\GameSDL\GameSDL2\MenuButton.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\MenuB
 E:\Game\GameSDL\GameSDL2\MenuState.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\MenuState.obj
 E:\Game\GameSDL\GameSDL2\PauseState.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\PauseState.obj
 E:\Game\GameSDL\GameSDL2\PlayState.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\PlayState.obj
+E:\Game\GameSDL\GameSDL2\Skill.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\Skill.obj
+E:\Game\GameSDL\GameSDL2\Skill_Hasagi.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\Skill_Hasagi.obj
+E:\Game\GameSDL\GameSDL2\SpecialAbiliyState.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\SpecialAbiliyState.obj
 E:\Game\GameSDL\GameSDL2\TextureManager.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\TextureManager.obj
 E:\Game\GameSDL\GameSDL2\Timer.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\Timer.obj
 E:\Game\GameSDL\GameSDL2\Warrior.cpp;E:\Game\GameSDL\GameSDL2\x64\Debug\Warrior.obj

@@ -30,7 +30,7 @@ void TextureManager::Draw(std::string id, int x, int y, int width, int height, S
 	SDL_RenderCopyEx(Engine::GetInstance()->GetRenderer(), m_TextureMap[id], &srcRect, &dstRect, 0, nullptr, flip);
 }
 
-void TextureManager::DrawFrame(std::string id, int x, int y, int width, int height, int row, int frame, SDL_RendererFlip flip)
+void TextureManager::DrawFrame(std::string id, int x, int y, int width, int height, int row, int frame, SDL_RendererFlip flip,SDL_Point* center)
 {
 	/*srcRect
 	width * frame: lay toa do x cua khung thu frame
@@ -45,9 +45,10 @@ void TextureManager::DrawFrame(std::string id, int x, int y, int width, int heig
 	srcRect: KDL la SDL_Rect, la 1 hinh chu nhat tren texture nguon, noi hinh anh duoc sao chep
 	dstRect: KDL la SDL_Rect, la hinh chu nhat tren dich ve(man hinh), noi hinh anh duoc sao chep den
 	*/
-	SDL_RenderCopyEx(Engine::GetInstance()->GetRenderer(), m_TextureMap[id], &srcRect, &dstRect, 0, nullptr, flip);
+	
+	SDL_RenderCopyEx(Engine::GetInstance()->GetRenderer(), m_TextureMap[id], &srcRect, &dstRect, 0, center, flip);
 
-
+	
 }
 
 void TextureManager::Drop(std::string id)

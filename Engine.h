@@ -29,6 +29,17 @@ public:
 
 	GameStateMachine* getStateMachine() { return m_pGameStateMachine; }
 
+	void setMouse(int x,int y) {
+		mouseX = x;
+		mouseY = y;
+	}
+	
+	Vector2D getMouse() {
+		Vector2D Mouse;
+		Mouse.X = mouseX;
+		Mouse.Y = mouseY;
+		return Mouse;
+	}
 private:
 	Engine() {}
 
@@ -38,7 +49,7 @@ private:
 	GameStateMachine* m_pGameStateMachine;
 	bool m_IsRunning;
 
-	
+	int mouseX, mouseY;
 
 };
 
