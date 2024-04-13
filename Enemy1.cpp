@@ -15,14 +15,10 @@ Enemy1::Enemy1(Properties* props) : Enemy(props)
 	m_Damage = 20;
 	m_IsRunning = false;
 
-	m_AttackTime = ATTACK_TIME;
-
 	m_HasAttackedPostCollision = false;
 	m_IsAttacking = false;
 	m_IsCrouching = false;
 	m_CanAttack = true;
-	m_IsUp = false;
-	m_IsDown = false;
 
 	center = new SDL_Point;
 	center->x = m_Width / 2;
@@ -32,6 +28,7 @@ Enemy1::Enemy1(Properties* props) : Enemy(props)
 
 	m_Collider = new Collider();
 	//m_Collider->SetBuffer(-45, -40, 45, 40);
+	m_attackCollider = NULL;
 
 	m_RigidBody = new RigidBody();
 	//m_Position = new Vector2D;
@@ -69,40 +66,37 @@ void Enemy1::Update(float dt) {
 	if (isAlive() == false) {
 		Clean();
 	}
-
-	if (m_IsAttacking) {
-		AttackZone(dt);
-		//printf("Attack time: %f\n", m_AttackTime);
-		m_RigidBody->UnSetForce();
+	/*-------xu li tan cong-----------------*/
+	if (m_IsAttacking && m_Animation->getSpriteFrame() == 7 && m_FinishAttack == false) {
+		m_FinishAttack = true;
 	}
 
-	
-	m_IsCrouching = false;
+	if (m_IsAttacking && m_Animation->getSpriteFrame() != 7 && m_FinishAttack) {
+		if (m_attackCollider != NULL) {
+			delete m_attackCollider;
+			m_attackCollider = NULL;
+		}
+		m_IsAttacking = false;
+		m_CanAttack = true;
+	}
+	/*-----------------------------------------*/
 
-	//m_Animation->SetProps("skeleton_idle", 1, 4, 100);
+	/*--------------------------xu li bi thuong-----------------------*/
+	if (m_IsHurt) {
+		m_IsRunning = false;
+	}
+	if (m_IsHurt && m_Animation->getSpriteFrame() == 3 && m_FinishHurt == false) {
+		m_FinishHurt = true;
+	}
+	if (m_FinishHurt && m_Animation->getSpriteFrame() != 3) {
+		m_IsHurt = false;
+	}
+	/*-------------------------------------------------------*/
+
 	m_RigidBody->UnSetForce();
 
 	//m_Flip = SDL_FLIP_NONE;
 	m_RigidBody->ApplyForce(m_Direction * RUN_FORCE);
-	/*m_RigidBody->ApplyForceX(BACKWARD * RUN_FORCE / 2);
-	m_IsRunning = true;
-	m_Flip = SDL_FLIP_HORIZONTAL;*/
-
-	/*if (Input::GetInstance()->GetLeftMouseButton()) {
-		m_IsAttacking = true;
-	}
-
-	if (m_IsAttacking && m_AttackTime > 0)
-	{
-		printf("attack time: %f\n", m_AttackTime);
-		m_AttackTime -= dt;
-	}
-	else {
-		m_IsAttacking = false;
-		m_AttackTime = ATTACK_TIME;
-	}*/
-
-	//(m_FollowDirection);
 
 	m_RigidBody->Update(dt);
 	m_LastSafePosition.X = m_Transform->X;
@@ -138,11 +132,11 @@ void Enemy1::Update(float dt) {
 }
 bool Enemy1::Attack(float dt) {
 	if (!m_IsAttacking && m_CanAttack) {
+		m_IsRunning = false;
 		m_IsAttacking = true;
 		m_CanAttack = false; // Ngăn không cho tấn công lại cho đến khi đã sẵn sàng
-		m_AttackTime = ATTACK_TIME; // Thời gian cho một lần tấn công
-		//m_CurrentFrame = 0;
-		// Bắt đầu hoạt hình tấn công
+		m_hasDealtDamage = false;
+		m_FinishAttack = false;
 	}
 	return true;
 }
@@ -150,14 +144,41 @@ bool Enemy1::Attack(float dt) {
 
 void Enemy1::AnimationState()
 {
-	m_Animation->SetProps("skeleton_idle", 1, 4, 100,4); //idle
+	std::string currentState;
+	//idle
+	if (!m_IsRunning && !m_IsAttacking && !m_IsHurt) {
+		currentState = "idle";
+		if (currentState != m_LastState) {
+			m_Animation->SetProps("skeleton_idle", 1, 4, 100, 4);
+			m_Animation->Start();
+		}
+	}
 
 	//running
-	if (m_IsRunning) m_Animation->SetProps("skeleton_run", 1, 4, 100,4);
-	////crouch
-	//if(m_IsCrouching) m_Animation->SetProps("player_crouch", 1, 1, 100);
+	if (m_IsRunning && !m_IsAttacking && !m_IsHurt) {
+		currentState = "running";
+		if (currentState != m_LastState) {
+			m_Animation->SetProps("skeleton_run", 1, 4, 100, 4);
+			m_Animation->Start();
+		}
+	}
 	//attacking
-	if (m_IsAttacking) m_Animation->SetProps("skeleton_attack", 1, 8, 250,8);
+	if (m_IsAttacking) {
+		currentState = "attacking";
+		if (currentState != m_LastState) {
+			m_Animation->SetProps("skeleton_attack", 1, 8, 250, 8);
+			m_Animation->Start();
+		}
+	}
+	//hurting
+	if (m_IsHurt && !m_IsRunning && !m_IsAttacking) {
+		currentState = "hurt";
+		if (currentState != m_LastState) {
+			m_Animation->SetProps("skeleton_hurt", 1, 4, 100, 4);
+			m_Animation->Start();
+		}
+	}
+	m_LastState = currentState;
 }
 
 
@@ -171,39 +192,18 @@ void Enemy1::Clean()
 }
 
 Collider* Enemy1::AttackZone(float dt) {
-	if (m_attackCollider == NULL) {
-		m_attackCollider = new Collider();
-	}
-	if (m_IsAttacking) {
+	if (m_IsAttacking && m_Animation->getSpriteFrame() >= 6 && m_Animation->getSpriteFrame() <= 7) {
+		if (m_attackCollider == NULL) {
+			m_attackCollider = new Collider();
+		}
 		if (m_Flip == SDL_FLIP_NONE) {
-			m_attackCollider->Set(m_Transform->X + 80, m_Transform->Y, 50, m_Height);
 			m_attackCollider->SetBuffer(-10, -50, 0, 110);
+			m_attackCollider->Set(m_Transform->X + 80, m_Transform->Y, 50, m_Height);
 		}
 		else {
-			m_attackCollider->Set(m_Transform->X + 20 , m_Transform->Y, 40, m_Height);
 			m_attackCollider->SetBuffer(0, -50, 0, 110);
+			m_attackCollider->Set(m_Transform->X + 20 , m_Transform->Y, 40, m_Height);
 		}
-
-
-	}
-
-	//Attacking timer
-	if (m_IsAttacking && m_AttackTime > 0)
-	{
-		//printf("Warrior attack time: %f\n", m_AttackTime);
-		m_AttackTime -= dt;
-	}
-	else {
-
-		
-	}
-	if (m_AttackTime <= 0) {
-		m_IsAttacking = false;
-		m_CanAttack = true;
-		delete m_attackCollider;
-		m_attackCollider = NULL;
-		m_AttackTime = ATTACK_TIME;
-		// Kết thúc hoạt hình tấn công
 	}
 	return m_attackCollider;
 
@@ -213,18 +213,18 @@ void Enemy1::Follow_Warrior(Vector2D F)
 {
 	m_Position.X = m_Origin->X;
 	m_Position.Y = m_Origin->Y;
-	//printf("toa do cua quai: %f %f\n", m_Position.X, m_Position.Y);
 	m_Direction = F - m_Position;
-	//printf("toa do cua quai: %f %f\n", F.X, F.Y);
+	
 	m_Direction = m_Direction.Normalize();
-	//printf("toa do cua nhan vat: %f %f\n", direction.X, direction.Y);
+	
+	m_IsRunning = true;
+	
 	m_IsRunning = true;
 	if (m_Direction.X > 0) {
 		m_Flip = SDL_FLIP_NONE;
 	}
 	else if (m_Direction.X < 0) {
 		m_Flip = SDL_FLIP_HORIZONTAL;
-		//printf("Da lat");
 	}
 
 }

@@ -15,7 +15,13 @@ public:
 	virtual void AnimationState() override;
 
 	int getHealth() { return m_Health; }
-	virtual int getDamage() override { return m_Damage; }
+	virtual int getDamage() override {
+		if (m_IsAttacking && !m_hasDealtDamage) {
+			m_hasDealtDamage = true;
+			return m_Damage;
+		}
+		return 0;
+	}
 
 	//int setHealth(int health) { m_Health = health; }
 	//void getDamage() override {m_Damage = damage; }
@@ -34,8 +40,11 @@ public:
 	virtual bool isAlive() override { return m_Health > 0; }
 
 	virtual void receiveDamage(int damage) override {
+		if (!m_IsAttacking) {
+			m_IsHurt = true;
+			m_FinishHurt = false;
+		}
 		m_Health -= damage;
-		//printf("%d\n", m_Health);
 	}
 	virtual void Follow_Warrior(Vector2D F);
 
@@ -53,11 +62,11 @@ private:
 	bool m_HasAttackedPostCollision;
 	bool m_IsAttacking;
 	bool m_IsCrouching;
+	bool m_hasDealtDamage;
+	bool m_FinishAttack;
 
-	bool m_IsUp;
-	bool m_IsDown;
-
-	float m_AttackTime;
+	bool m_IsHurt;
+	bool m_FinishHurt;
 	bool m_CanAttack;
 
 	HealthBar* m_HealthBar;
@@ -77,5 +86,7 @@ private:
 	Vector2D m_Direction;
 
 	SDL_Point* center;
+
+	std::string m_LastState;
 };
 

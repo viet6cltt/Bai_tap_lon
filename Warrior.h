@@ -8,7 +8,7 @@
 #include "Vector2D.h"
 #include "Collider.h"
 #include "Skill_Hasagi.h"
-
+#include "FontManager.h"
 #include "SpecialAbiliyState.h"
 
 #define ATTACK_TIME 30.0f
@@ -24,7 +24,14 @@ public:
 	virtual void Update(float dt);
 
 	int getHealth() { return m_Health; }
-	int getDamage() { return m_Damage; }
+	int getmaxHealth() { return m_maxHealth; }
+	int getDamage() {
+		if (m_IsAttacking && !m_hasDealtDamage) {
+			m_hasDealtDamage = true;
+			return m_Damage;
+		}
+		return 0;
+	}
 
 	int setHealth(int health) { m_Health = health; }
 	int setDamage(int damage) { m_Damage = damage; }
@@ -33,7 +40,14 @@ public:
 
 	Collider* getCollider() { return m_Collider; }
 	Collider* AttackZone(float dt);
+	Collider* getAttackZone() {
+		return m_attackCollider;
+	}
 	void receiveDamage(int damage){
+		if (!m_IsAttacking) {
+			m_IsHurt = true;
+			m_FinishHurt = false;
+		}
 		m_Health -= damage;
 	}
 
@@ -44,8 +58,13 @@ public:
 		m_Position.Y = m_Origin->Y;
 		return m_Position;
 	}
-
-
+	
+	void HealingSkill() {
+		m_Health += 90;
+		if (m_Health > m_maxHealth) {
+			m_Health = m_maxHealth;
+		}
+	}
 
 	bool isAlive() const { return m_Health > 0; }
 private:
@@ -54,14 +73,15 @@ private:
 	bool m_IsRunning;
 
 	bool m_isSkill_Hasagi;
-	
+	bool m_IsHurt;
+	bool m_FinishHurt;
 	bool m_IsAttacking;
 	bool m_IsCrouching;
+	bool m_CanAttack;
+	bool m_hasDealtDamage;
+	bool m_FinishAttack;
 
 	bool m_skill_Dao_Pha_Thien_Mon;
-
-	bool m_IsUp;
-	bool m_IsDown;
 
 	float m_AttackTime;
 
@@ -75,6 +95,7 @@ private:
 	RigidBody* m_RigidBody;
 
 	int m_Health;
+	int m_maxHealth;
 	int m_Damage;
 
 	SDL_Rect m_Rect;
@@ -82,6 +103,13 @@ private:
 
 	Skill_Hasagi* m_skill_Hasagi;
 
+	std::string m_LastState;
+
+	int m_HealingCooldown;
+	int m_CurrentHealingCooldown;
+	bool m_IsHealing;
+	int m_HealingBeginTime;
+	int m_HealingTimeBefore;
 
 };
 

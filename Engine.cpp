@@ -54,11 +54,6 @@ bool Engine::Init()
 		return false;
 	}
 	
-	
-	
-	
-
-	
 	m_pGameStateMachine = new GameStateMachine();
 	m_pGameStateMachine->changeState(new MenuState());
 

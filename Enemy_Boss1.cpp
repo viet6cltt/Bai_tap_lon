@@ -11,7 +11,7 @@
 
 Enemy_Boss1::Enemy_Boss1(Properties* props) : Enemy(props)
 {
-	m_Health = 4000;
+	m_Health = 400;
 	m_Damage = 100;
 	m_IsRunning = false;
 	m_AttackBeginFrames = 4;
@@ -19,14 +19,13 @@ Enemy_Boss1::Enemy_Boss1(Properties* props) : Enemy(props)
 
 	hasFlipped = false;
 
-	m_AttackTime = ATTACK_TIME;
-
 	m_HasAttackedPostCollision = false;
 	m_IsAttacking = false;
 	m_IsCrouching = false;
 	m_CanAttack = true;
 	m_IsUp = false;
 	m_IsDown = false;
+	m_IsHurt = false;
 
 	center = new SDL_Point();
 	center->x = 100;
@@ -36,6 +35,7 @@ Enemy_Boss1::Enemy_Boss1(Properties* props) : Enemy(props)
 
 	m_Collider = new Collider();
 	//m_Collider->SetBuffer(-45, -40, 45, 40);
+	m_attackCollider = NULL;
 
 	m_RigidBody = new RigidBody();
 	//m_Position = new Vector2D;
@@ -63,30 +63,35 @@ void Enemy_Boss1::Draw()
 	SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
 }
 void Enemy_Boss1::Update(float dt) {
-
-	//m_Health -= dt;
-	if (isAlive() == false) {
-		Clean();
-	}
-
+	
 	m_HealthBar->setProperties(m_Transform->X + 70, m_Transform->Y + 43, 29, 5);
 	m_HealthBar->setCurrentHealth(m_Health);
 	m_HealthBar->Update(dt);
 
-	
-	m_IsCrouching = false;
-	//m_Animation->SetProps("skeleton_idle", 1, 4, 100);
-	m_RigidBody->UnSetForce();
-	//m_Flip = SDL_FLIP_NONE;
-	m_RigidBody->ApplyForce(m_Direction * RUN_FORCE);
-	if (m_IsAttacking) {
-		//AttackZone(dt);
-		//printf("Attack time: %f\n", m_AttackTime);
-		m_RigidBody->UnSetForce();
+	if (isAlive() == false) {
+		Clean();
 	}
-	/*m_RigidBody->ApplyForceX(BACKWARD * RUN_FORCE / 2);
-	m_IsRunning = true;
-	m_Flip = SDL_FLIP_HORIZONTAL;*/
+	/*----------------xu li tan cong--------------------------*/
+	if (m_Animation->getSpriteFrame() > m_AttackFinishFrames) {
+		if (m_attackCollider != NULL) {
+			delete m_attackCollider;
+			m_attackCollider = NULL;
+		}
+	}
+
+	if (m_IsAttacking && m_Animation->getSpriteFrame() == 1 && m_Animation->getSpriteRow() == 4 && m_FinishAttack == false) {
+		m_FinishAttack = true;
+	}
+
+	if (m_IsAttacking && m_Animation->getSpriteFrame() != 1 && m_Animation->getSpriteRow() == 4 && m_FinishAttack) {
+		m_IsAttacking = false;
+		m_CanAttack = true;
+	}
+	//-----------xu li di chuyen------------------------
+	m_RigidBody->UnSetForce();	
+	if (!m_IsAttacking) {
+		m_RigidBody->ApplyForce(m_Direction * RUN_FORCE);
+	}
 	if (m_Flip == SDL_FLIP_HORIZONTAL && !hasFlipped)
 	{
 		std::cout << "Nhan vat da bi lat" << std::endl;
@@ -104,10 +109,19 @@ void Enemy_Boss1::Update(float dt) {
 		m_Origin->X = m_Transform->X + center->x;
 	}
 	
-	
 	m_Origin->Y = m_Transform->Y + m_Height / 2;
 
-	
+	/*--------------------------xu li bi thuong-----------------------*/
+	if (m_IsHurt) {
+		m_IsRunning = false;
+	}
+	if (m_IsHurt && m_Animation->getSpriteFrame() == 5 && m_FinishHurt == false) {
+		m_FinishHurt = true;
+	}
+	if (m_FinishHurt && m_Animation->getSpriteFrame() != 5) {
+		m_IsHurt = false;
+	}
+	/*-------------------------------------------------------*/
 
 	m_RigidBody->Update(dt);
 	m_LastSafePosition.X = m_Transform->X;
@@ -121,15 +135,13 @@ void Enemy_Boss1::Update(float dt) {
 	//m_Collider->SetBuffer(0, 0, 0, 0);
 
 	//std::cout << "m_Transferom->x" << m_Transform->X<<std::endl;
-	
-	m_Collider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
 	if (m_Flip == SDL_FLIP_NONE) {
 		m_Collider->SetBuffer(-80, -40, 85, 40);
 	}
 	else {
 		m_Collider->SetBuffer(-20, -40, 85, 40);
 	}
-
+	m_Collider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
 	if (CollisionHandler::GetInstance()->MapCollision(m_Collider->Get())) {
 		m_Transform->X = m_LastSafePosition.X;
 	}
@@ -139,102 +151,63 @@ void Enemy_Boss1::Update(float dt) {
 		m_Transform->Y = m_LastSafePosition.Y;
 	}
 
-
-	//Di chuyen theo nhan vat
-
 	AnimationState();
 
 	m_Animation->Update();
 
 
 }
-bool Enemy_Boss1::Attack(float dt) {
-	if (!m_IsAttacking && m_CanAttack) {
-		m_IsAttacking = true;
-		m_CanAttack = false; // Ngăn không cho tấn công lại cho đến khi đã sẵn sàng
-		m_AttackTime = ATTACK_TIME; // Thời gian cho một lần tấn công
-		//m_CurrentFrame = 0;
-		// Bắt đầu hoạt hình tấn công
-	}
-	return true;
-}
-
-
 void Enemy_Boss1::AnimationState()
 {
-	//m_Animation->SetProps("boss1", 1, 8, 100,8); //idle
+	std::string currentState;
+	//idle
+	if (!m_IsRunning && !m_IsAttacking && !m_IsHurt) {
+		currentState = "idle";
+		if (currentState != m_LastState) {
+			m_Animation->SetProps("boss1", 1, 8, 100, 8);
+			m_Animation->Start();
+		}
+	}
 
 	//running
-	if (m_IsRunning) m_Animation->SetProps("boss1", 2, 8, 100,8);
-	////crouch
-	//if(m_IsCrouching) m_Animation->SetProps("player_crouch", 1, 1, 100);
+	
+	if (m_IsRunning && !m_IsAttacking && !m_IsHurt) {
+		currentState = "running";
+		if (currentState != m_LastState) {
+			if (m_IsRunning) m_Animation->SetProps("boss1", 2, 8, 100, 8);
+			m_Animation->Start();
+		}
+	}
 	//attacking
-	if (m_IsAttacking) m_Animation->SetProps("boss1", 3, 10, 250,8);
+	if (m_IsAttacking) {
+		currentState = "attacking";
+		if (currentState != m_LastState) {
+			if (m_IsAttacking) m_Animation->SetProps("boss1", 3, 10, 150, 8);
+			m_Animation->Start();
+		}
+	}
+	//hurting	
+	if (m_IsHurt && !m_IsRunning && !m_IsAttacking) {
+		currentState = "hurt";
+		if (currentState != m_LastState) {
+			m_Animation->SetProps("boss1", 4, 4, 250, 8, 2);
+			m_Animation->Start();
+		}
+	}
+	m_LastState = currentState;
+
 }
 
 
 
-void Enemy_Boss1::Clean()
-{
-	//TextureManager::GetInstance()->Drop("skeleton_run");
+void Enemy_Boss1::Clean(){
+	TextureManager::GetInstance()->Drop("boss_1");
 	//TextureManager::GetInstance()->Drop("skeleton_idle");
 	//TextureManager::GetInstance()->Drop("skeleton_attack");
 
 }
 
-Collider* Enemy_Boss1::AttackZone(float dt) {
-	
-	if (m_IsAttacking && m_Animation->getSpriteFrame() >= m_AttackBeginFrames && m_Animation->getSpriteFrame()<= m_AttackFinishFrames) {
-		if (m_attackCollider == NULL) {
-			m_attackCollider = new Collider();
-		}
-		if (m_Flip == SDL_FLIP_NONE) {
-			m_attackCollider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
-			m_attackCollider->SetBuffer(-10, -10, 40, 10);
-		}
-		else {
-			m_attackCollider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
-			m_attackCollider->SetBuffer(-40, -10, 50, 10);
-		}
-	}
-	if (!m_IsAttacking || m_Animation->getSpriteFrame() > m_AttackFinishFrames) {
-		// Kết thúc hoạt hình tấn công và xóa collider
-		m_IsAttacking = false;
-		m_CanAttack = true;
-		if (m_attackCollider != NULL) {
-			delete m_attackCollider;
-			m_attackCollider = NULL;
-		}
-		// Không cần thiết lập lại m_AttackTime vì không dùng đến nữa
-	}
 
-	return m_attackCollider;
-
-
-
-
-
-	//Attacking timer
-	//if (m_IsAttacking && m_AttackTime > 0)
-	//{
-	//	//printf("Warrior attack time: %f\n", m_AttackTime);
-	//	m_AttackTime -= dt;
-	//}
-	//else {
-
-
-	//}
-	//if (m_AttackTime <= 0) {
-	//	m_IsAttacking = false;
-	//	m_CanAttack = true;
-	//	delete m_attackCollider;
-	//	m_attackCollider = NULL;
-	//	m_AttackTime = ATTACK_TIME;
-	//	// Kết thúc hoạt hình tấn công
-	//}
-	//return m_attackCollider;
-
-}
 
 void Enemy_Boss1::Follow_Warrior(Vector2D F)
 {
@@ -255,4 +228,33 @@ void Enemy_Boss1::Follow_Warrior(Vector2D F)
 		m_Flip = SDL_FLIP_NONE;
 	}
 
+}
+
+bool Enemy_Boss1::Attack(float dt) {
+	if (!m_IsAttacking && m_CanAttack) {
+		m_IsRunning = false;
+		m_IsAttacking = true;
+		m_CanAttack = false; // Ngăn không cho tấn công lại cho đến khi đã sẵn sàng
+		m_hasDealtDamage = false;
+		m_FinishAttack = false;
+	}
+	return true;
+}
+
+Collider* Enemy_Boss1::AttackZone(float dt) {
+	
+	if (m_IsAttacking && m_Animation->getSpriteFrame() >= m_AttackBeginFrames && m_Animation->getSpriteFrame() <= m_AttackFinishFrames) {
+		std::cout << m_Animation->getSpriteFrame() << std::endl;
+		if (m_attackCollider == NULL) {
+			m_attackCollider = new Collider();
+		}
+		if (m_Flip == SDL_FLIP_NONE) {
+			m_attackCollider->SetBuffer(-10, -10, 40, 10);
+		}
+		else {
+			m_attackCollider->SetBuffer(-40, -10, 50, 10);
+		}
+		m_attackCollider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
+	}
+	return m_attackCollider;
 }

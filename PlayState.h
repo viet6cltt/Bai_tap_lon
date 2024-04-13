@@ -14,6 +14,7 @@
 #include "Enemy1.h"
 #include "Enemy.h"
 #include "Enemy_Boss1.h"
+#include "FontManager.h"
 
 
 class PlayState : public GameState
@@ -31,10 +32,12 @@ public:
 private:
 	static const std::string s_playID;
 	//std::vector<Warrior*> m_playerObjects;
-	std::vector<Warrior*> m_Warrior;
+	Warrior* m_Warrior;
 	HealthBar* m_playerheal;
 	std::vector<Enemy*> m_Enemies;
 	std::vector<HealthBar*> m_EnemyHealth;
+
+	int m_Score;
 
 	double m_SpawnTimer;
 };

@@ -11,8 +11,8 @@ int main(int argc, char** argv) {
 		
 		Timer::GetInstance()->Tick();
 		Engine::GetInstance()->Events();
-		Engine::GetInstance()->Render();
 		Engine::GetInstance()->Update();
+		Engine::GetInstance()->Render();
 	}
 
 	Engine::GetInstance()->Clean();

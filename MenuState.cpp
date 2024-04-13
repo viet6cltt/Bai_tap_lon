@@ -2,6 +2,7 @@
 
 
 bool MenuState::OnEnter() {
+    time = 0;
     printf("menu on enter\n");
 
     TextureManager::GetInstance()->Load("menu_background", "assets\\darkest.png");
@@ -40,6 +41,7 @@ void MenuState::Render() {
 }
 
 void MenuState::Update(float dt) {
+    time++;
     // Cập nhật trạng thái của tất cả các nút
     for (MenuButton* button : buttons) {
         button->Update(dt);

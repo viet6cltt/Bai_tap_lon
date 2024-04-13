@@ -6,6 +6,8 @@
 #include "GameStateMachine.h"
 #include <vector>
 #include "Engine.h"
+#include "FontManager.h"
+#include <string>
 
 class MenuState : public GameState{
 public:
@@ -32,4 +34,5 @@ public:
 
 private:
     std::vector<MenuButton*> buttons;  // Danh sách các nút
+    int time;
 };

@@ -76,7 +76,7 @@ bool CollisionHandler::MapCollision(SDL_Rect a)
 
 	for (int i = left_tile; i <= right_tile; i++)
 		for (int j = top_tile; j <= bottom_tile; j++)
-			if (map_tile[j][i] > 0) {
+			if (map_tile[j][i] != 10) {
 				return true;
 			}
 
