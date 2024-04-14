@@ -23,6 +23,9 @@ public:
 	virtual void Clean();
 	virtual void Update(float dt);
 
+	void LoadSound();
+	void Warrior_VoiceHanlder();
+
 	int getHealth() { return m_Health; }
 	int getmaxHealth() { return m_maxHealth; }
 	//get Damage
@@ -164,6 +167,8 @@ private:
 	int m_SlashBeginTime;
 	int m_SlashDamage;
 	Animation* m_SlashSkillAnimation;
+	//sound
+	bool m_IsSoundPlay;
 
 };
 

@@ -44,6 +44,10 @@ bool PlayState::OnEnter() {
     TextureManager::GetInstance()->Load("u_key", "assets\\U-Key.png");
     TextureManager::GetInstance()->Load("i_key", "assets\\I-Key.png");
 
+    //sfx
+    SoundManager::GetInstance()->Load("playstate_music", "assets\\playstate_music.ogg", SOUND_MUSIC, MIX_MAX_VOLUME / 3);
+    SoundManager::GetInstance()->PlayMusic("playstate_music", -1);
+
     //UI
     
 
@@ -60,6 +64,7 @@ bool PlayState::OnEnter() {
 
 bool PlayState::OnExit() {
     //TextureManager::GetInstance()->Drop("background");
+    Mix_HaltMusic();
     m_Warrior->Clean();
     for (int i = 0; i < m_Enemies.size(); i++) {
         m_Enemies[i]->Clean();

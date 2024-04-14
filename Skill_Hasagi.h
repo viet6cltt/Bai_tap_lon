@@ -2,7 +2,7 @@
 #include "Skill.h"
 #include "Engine.h"
 
-#define RUN_FORCE 4.0f
+#define RUN_FORCE 5.0f
 
 class Skill_Hasagi : public Skill
 {

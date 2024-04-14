@@ -14,8 +14,8 @@ class SoundManager
 public:
 	static SoundManager* GetInstance() { return s_Instance = (s_Instance != nullptr) ? s_Instance : new SoundManager(); }
 	
-	bool Load(std::string ID, std::string soundPath, sound_type type);
-	void PlaySound(std::string ID, int loops = 0);
+	bool Load(std::string ID, std::string soundPath, sound_type type, int volume = MIX_MAX_VOLUME);
+	void PlaySound(std::string ID, int loops = 0,int channel = -1);
 	void PlayMusic(std::string ID, int loops = 0);
 private:
 	SoundManager();

@@ -7,7 +7,7 @@
 #include<iostream>
 //#include "Camera.h"
 #include "Engine.h"
-
+#include "SoundManager.h"
 
 Warrior::Warrior(Properties* props) : Character(props)
 {
@@ -23,7 +23,7 @@ Warrior::Warrior(Properties* props) : Character(props)
 	center = new SDL_Point;
 	center->x = 56;
 	center->y = m_Height / 2;
-
+	m_IsSoundPlay = false;
 	m_Flip = SDL_FLIP_NONE;
 
 	m_skill_Dao_Pha_Thien_Mon = false;
@@ -46,7 +46,7 @@ Warrior::Warrior(Properties* props) : Character(props)
 	m_CurrentHealingCooldown = 0;
 	m_GravityCooldown = 20;
 	m_GravityDamage = 2;
-	m_HasagiCooldown = 15;
+	m_HasagiCooldown = 10;
 	m_CanUseGravity = true;
 	m_CanUseHasagi = true;
 	m_SlashCooldown = 6;
@@ -58,6 +58,8 @@ Warrior::Warrior(Properties* props) : Character(props)
 	FontManager::GetInstance()->LoadFont("gravityskill_cooldown", "assets\\ExpressionPro.ttf", 25);
 	FontManager::GetInstance()->LoadFont("hasagiskill_cooldown", "assets\\ExpressionPro.ttf", 25);
 	FontManager::GetInstance()->LoadFont("slashskill_cooldown", "assets\\ExpressionPro.ttf", 25);
+	LoadSound();
+	
 }
 
 void Warrior::Draw()
@@ -140,6 +142,8 @@ void Warrior::Update(float dt)
 	//std::cout << "mau:" << m_Health << std::endl;
 	//m_Health -= dt;
 	//printf("mau: %d\n", m_Health);
+	Warrior_VoiceHanlder();
+
 	if (isAlive() == false) {
 		Clean();
 	}
@@ -151,6 +155,7 @@ void Warrior::Update(float dt)
 
 	/*-----xu li tan cong-------------------*/
 	if (Input::GetInstance()->GetKeyDown(SDL_SCANCODE_J)&&!m_IsAttacking ) {
+		SoundManager::GetInstance()->PlaySound("swordslash_sfx", 0, 7);
 		m_FinishAttack = false;
 		m_IsRunning = false;
 		m_IsAttacking = true;
@@ -182,6 +187,9 @@ void Warrior::Update(float dt)
 		m_CanUseHasagi = false;
 		m_isSkill_Hasagi = false;
 		m_HasagiBeginTime = SDL_GetTicks();
+		SoundManager::GetInstance()->PlaySound("hasagi_sfx",0 ,0);
+		SoundManager::GetInstance()->PlaySound("hasagi_voice",0, 1);
+
 	}
 	if (!m_CanUseHasagi) {
 		m_CurrentHasagiCooldown = (SDL_GetTicks() - m_HasagiBeginTime) / 1000;
@@ -193,6 +201,7 @@ void Warrior::Update(float dt)
 	}
 	if (m_skill_Hasagi != NULL) {
 		if (m_skill_Hasagi->IsDeleted()) {
+			Mix_HaltChannel(2);
 			delete m_skill_Hasagi;
 			m_skill_Hasagi = NULL;
 		}
@@ -350,7 +359,7 @@ void Warrior::AnimationState()
 		//std::cout << m_Animation->getSpriteFrame() << std::endl;
 		currentState = "attacking";
 		if (currentState != m_LastState) {
-			m_Animation->SetProps("player", 3, 12, 30, 12);
+			m_Animation->SetProps("player", 3, 12, 60, 12);
 			m_Animation->Start();
 		}
 	}
@@ -378,7 +387,7 @@ void Warrior::AnimationState()
 
 	if (m_IsSlashSkill) {
 		if (m_SlashSkillBegin) {
-			m_SlashSkillAnimation->SetProps("slashskill", 1, 4, 90, 4);
+			m_SlashSkillAnimation->SetProps("slashskill", 1, 4, 120, 4);
 			m_SlashSkillAnimation->Start();
 			m_SlashSkillBegin = false;
 		}
@@ -394,6 +403,7 @@ void Warrior::Clean()
 
 void Warrior::HealingSkillHandler() {
 	if (Input::GetInstance()->GetKeyDown(SDL_SCANCODE_E) && m_IsHealing == false) {
+		SoundManager::GetInstance()->PlaySound("healing_sfx", 0, 4);
 		m_IsHealing = true;
 		m_HealingBeginTime = SDL_GetTicks();
 		m_CurrentHealingCooldown = 0;
@@ -421,6 +431,8 @@ void Warrior::GravitySkillHandler() {
 		m_GravitySKillBegin = true;
 		m_CurrentGravityCooldown = 0;
 		m_GravityBeginTime = SDL_GetTicks();
+		SoundManager::GetInstance()->PlaySound("gravity_voice", 0, 3);
+		SoundManager::GetInstance()->PlaySound("gravity_sfx", -1, 2);
 	}
 	if (!m_CanUseGravity) {
 		m_CurrentGravityCooldown = (SDL_GetTicks() - m_GravityBeginTime) / 1000;
@@ -432,6 +444,7 @@ void Warrior::GravitySkillHandler() {
 	}
 	if (m_IsGravitySkill && m_CurrentGravityCooldown > 5) {
 		m_IsGravitySkill = false;
+		Mix_HaltChannel(2);
 		if (m_GravitySkillAnimation != NULL) {
 			delete m_GravitySkillAnimation;
 			m_GravitySkillAnimation = NULL;
@@ -457,6 +470,9 @@ void Warrior::SlashSkillHandler()
 		m_SlashSkillBegin = true;
 		m_CurrentSlashCooldown = 0;
 		m_SlashBeginTime = SDL_GetTicks();
+		SoundManager::GetInstance()->PlaySound("slash_sfx", -1, 5);
+		SoundManager::GetInstance()->PlaySound("slash_voice", 0, 6);
+		
 	}
 	if (!m_CanUseSlash) {
 		m_CurrentSlashCooldown = (SDL_GetTicks() - m_SlashBeginTime) / 1000;
@@ -467,6 +483,7 @@ void Warrior::SlashSkillHandler()
 	}
 	if (m_IsSlashSkill && m_CurrentSlashCooldown > 1) {
 		m_IsSlashSkill = false;
+		Mix_HaltChannel(5);
 		if (m_SlashSkillAnimation != NULL) {
 			delete m_SlashSkillAnimation;
 			m_SlashSkillAnimation = NULL;
@@ -488,6 +505,41 @@ void Warrior::SlashSkillHandler()
 		}
 	}
 
+}
+
+void Warrior::LoadSound() {
+	SoundManager::GetInstance()->Load("hasagi_sfx", "assets\\Hasagi_sfx.mp3", SOUND_SFX, 50);
+	SoundManager::GetInstance()->Load("hasagi_voice", "assets\\Hasagi_voice.mp3", SOUND_SFX);
+	SoundManager::GetInstance()->Load("gravity_voice", "assets\\Gravity_voice.mp3", SOUND_SFX, 50);
+	SoundManager::GetInstance()->Load("gravity_sfx", "assets\\Gravity_sfx.mp3", SOUND_SFX, 100);
+	SoundManager::GetInstance()->Load("healing_sfx", "assets\\Healing_sfx.mp3", SOUND_SFX, 100);
+	SoundManager::GetInstance()->Load("slash_voice", "assets\\Slash_voice.mp3", SOUND_SFX, 50);
+	SoundManager::GetInstance()->Load("slash_sfx", "assets\\Slash_sfx.mp3", SOUND_SFX);
+	SoundManager::GetInstance()->Load("swordslash_sfx", "assets\\Swordslash_sfx.mp3", SOUND_SFX);
+	SoundManager::GetInstance()->Load("player_voice1", "assets\\player_voice1.mp3", SOUND_SFX);
+	SoundManager::GetInstance()->Load("player_voice2", "assets\\player_voice2.mp3", SOUND_SFX);
+	SoundManager::GetInstance()->Load("player_voice3", "assets\\player_voice3.mp3", SOUND_SFX);
+	SoundManager::GetInstance()->Load("player_voice4", "assets\\player_voice4.mp3", SOUND_SFX);
+}
+
+void Warrior::Warrior_VoiceHanlder() {
+	if (!m_IsAttacking && !m_IsGravitySkill && !m_IsHurt && !m_IsHealing && !m_IsSlashSkill && m_skill_Hasagi == NULL) {
+		int randomNum = rand() % 4 + 1;
+		if ((SDL_GetTicks() / 1000) % 6 == 0 && m_IsSoundPlay == false) {
+			switch (randomNum) {
+			case 1: SoundManager::GetInstance()->PlaySound("player_voice1", 0, 8); break;
+			case 2: SoundManager::GetInstance()->PlaySound("player_voice2", 0, 9); break;
+			case 3: SoundManager::GetInstance()->PlaySound("player_voice3", 0, 10); break;
+			case 4: SoundManager::GetInstance()->PlaySound("player_voice4", 0, 11); break;
+			}
+			m_IsSoundPlay = true;
+		}
+		if (m_IsSoundPlay == true && (SDL_GetTicks() / 1000) % 10 == 1) {
+			m_IsSoundPlay = false;
+			std::cout << "da reset";
+		}
+
+	}
 }
 
 
