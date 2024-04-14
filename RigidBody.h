@@ -19,6 +19,7 @@ public:
 	{
 		m_Mass = UNI_MASS;
 		//m_Gravity = GRAVITY;
+		m_SpeedMultiplier = 1.0f;
 	}
 
 	//Setter Gravity & Mass
@@ -35,6 +36,13 @@ public:
 	//inline void ApplyFriction(Vector2D Fr) { m_Friction = Fr; }
 	//inline void UnSetFriction() { m_Friction = Vector2D(0, 0); }
 
+	inline void setSpeedMultiplier() {
+		m_SpeedMultiplier = 4.0f;
+	}
+	inline void setNormalSpeed() {
+		m_SpeedMultiplier = 1.0f;
+	}
+
 	//Getters
 	inline float GetMass() { return m_Mass; }
 	inline Vector2D Position() { return m_Position; }
@@ -47,7 +55,7 @@ public:
 		m_Accelaration.X = m_Force.X  / m_Mass;
 		m_Accelaration.Y = m_Force.Y / m_Mass;
 		
-		m_Velocity = m_Accelaration * dt;
+		m_Velocity = m_Accelaration * dt * m_SpeedMultiplier;
 		m_Position = m_Velocity * dt;
 	}
 
@@ -63,6 +71,7 @@ private:
 	Vector2D m_Position;
 	Vector2D m_Velocity;
 	Vector2D m_Accelaration;
+	float m_SpeedMultiplier;
 };
 
 

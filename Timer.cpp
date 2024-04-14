@@ -1,5 +1,6 @@
 #include "Timer.h"
 #include <SDL.h>
+#include <iostream>
 
 Timer* Timer::s_Instance = nullptr;
 

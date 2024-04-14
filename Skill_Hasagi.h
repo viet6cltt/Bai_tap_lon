@@ -2,15 +2,21 @@
 #include "Skill.h"
 #include "Engine.h"
 
-#define RUN_FORCE 5.0f
+#define RUN_FORCE 4.0f
 
 class Skill_Hasagi : public Skill
 {
 public:
 	Skill_Hasagi(Properties* props,int damage);
 
-	void setDamage(int damage) { m_damage = damage * 2; }
-	int getDamage() { return m_damage; }
+	void setDamage(int damage) { m_damage = damage * 15; }
+	int getDamage() { 
+		if (!m_hasDealtDamage) {
+			m_hasDealtDamage = true;
+			return m_damage;
+		}
+		return 0;
+	}
 
 	virtual void Activate(Vector2D,Vector2D) override;
 	virtual void Update(float dt) override;
@@ -34,6 +40,7 @@ private:
 	Vector2D m_Position;
 
 	float m_LifeTime;
+	bool m_hasDealtDamage;
 
 	bool m_IsDeleted;
 };

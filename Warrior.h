@@ -25,6 +25,7 @@ public:
 
 	int getHealth() { return m_Health; }
 	int getmaxHealth() { return m_maxHealth; }
+	//get Damage
 	int getDamage() {
 		if (m_IsAttacking && !m_hasDealtDamage) {
 			m_hasDealtDamage = true;
@@ -32,16 +33,39 @@ public:
 		}
 		return 0;
 	}
+	int getGravitySkillDamage() {
+		return m_GravityDamage;
+	}
+
+	int getSlashSkillDamage() {
+		return m_SlashDamage;
+	}
 
 	int setHealth(int health) { m_Health = health; }
 	int setDamage(int damage) { m_Damage = damage; }
 
-	void setisSkill_Hasagi(bool k) { m_isSkill_Hasagi = k; }
+	bool canUseHasage() {
+		return m_CanUseHasagi;
+	}
+	void setisSkill_Hasagi(bool k) {
+		if (m_CanUseHasagi) {
+			m_isSkill_Hasagi = k;
+		}
+	}
 
 	Collider* getCollider() { return m_Collider; }
 	Collider* AttackZone(float dt);
 	Collider* getAttackZone() {
 		return m_attackCollider;
+	}
+	Collider* getGravityZone() {
+		return m_GravitySkillCollider;
+	}
+	Skill_Hasagi* getHasagiSkill() {
+		return m_skill_Hasagi;
+	}
+	Collider* getSlashZone() {
+		return m_SlashSkillCollider;
 	}
 	void receiveDamage(int damage){
 		if (!m_IsAttacking) {
@@ -65,6 +89,10 @@ public:
 			m_Health = m_maxHealth;
 		}
 	}
+
+	void HealingSkillHandler();
+	void GravitySkillHandler();
+	void SlashSkillHandler();
 
 	bool isAlive() const { return m_Health > 0; }
 private:
@@ -92,6 +120,7 @@ private:
 	Collider* m_Collider;
 	Vector2D m_LastSafePosition;
 	Animation* m_Animation;
+	
 	RigidBody* m_RigidBody;
 
 	int m_Health;
@@ -104,12 +133,37 @@ private:
 	Skill_Hasagi* m_skill_Hasagi;
 
 	std::string m_LastState;
-
+	//healing skill
 	int m_HealingCooldown;
 	int m_CurrentHealingCooldown;
 	bool m_IsHealing;
 	int m_HealingBeginTime;
 	int m_HealingTimeBefore;
+	//gravity skill
+	bool m_IsGravitySkill;//kiem soat viec gay damage, collider
+	bool m_CanUseGravity; //kiem soat viec co dung duoc skill khong
+	Collider* m_GravitySkillCollider;
+	bool m_GravitySKillBegin;
+	int m_GravityCooldown;
+	int m_CurrentGravityCooldown;
+	int m_GravityBeginTime;
+	int m_GravityDamage;
+	Animation* m_GravitySkillAnimation;
+	//hasagi skill
+	bool m_CanUseHasagi;
+	int m_HasagiCooldown;
+	int m_CurrentHasagiCooldown;
+	int m_HasagiBeginTime;
+	//bigslash skill
+	bool m_IsSlashSkill;//kiem soat viec gay damage, collider
+	bool m_CanUseSlash; //kiem soat viec co dung duoc skill khong
+	Collider* m_SlashSkillCollider;
+	bool m_SlashSkillBegin;
+	int m_SlashCooldown;
+	int m_CurrentSlashCooldown;
+	int m_SlashBeginTime;
+	int m_SlashDamage;
+	Animation* m_SlashSkillAnimation;
 
 };
 

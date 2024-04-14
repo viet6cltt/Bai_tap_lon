@@ -53,14 +53,14 @@ void Enemy_Boss1::Draw()
 
 	if (m_attackCollider != NULL) {
 		SDL_Rect box1 = m_attackCollider->Get();
-		SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box1);
+		//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box1);
 	}
 
 	//TextureManager::GetInstance()->Draw("enemy_bar", m_Transform->X + 70, m_Transform->Y + 43, 29, 5);
 	m_HealthBar->Draw();
 	//box.x -= cam.X;
 	//box.y -= cam.Y;
-	SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
+	//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
 }
 void Enemy_Boss1::Update(float dt) {
 	
@@ -89,12 +89,12 @@ void Enemy_Boss1::Update(float dt) {
 	}
 	//-----------xu li di chuyen------------------------
 	m_RigidBody->UnSetForce();	
-	if (!m_IsAttacking) {
+	if (!m_IsAttacking || !m_IsHurt) {
 		m_RigidBody->ApplyForce(m_Direction * RUN_FORCE);
 	}
 	if (m_Flip == SDL_FLIP_HORIZONTAL && !hasFlipped)
 	{
-		std::cout << "Nhan vat da bi lat" << std::endl;
+		//std::cout << "Nhan vat da bi lat" << std::endl;
 		m_Transform->X += 2*center->x - m_Width;
 		m_Origin->X = m_Transform->X + m_Width - center->x;
 		hasFlipped = true;  // Đánh dấu rằng hình ảnh đã được lật
@@ -113,7 +113,7 @@ void Enemy_Boss1::Update(float dt) {
 
 	/*--------------------------xu li bi thuong-----------------------*/
 	if (m_IsHurt) {
-		m_IsRunning = false;
+		m_RigidBody->UnSetForce();
 	}
 	if (m_IsHurt && m_Animation->getSpriteFrame() == 5 && m_FinishHurt == false) {
 		m_FinishHurt = true;
@@ -179,7 +179,7 @@ void Enemy_Boss1::AnimationState()
 		}
 	}
 	//attacking
-	if (m_IsAttacking) {
+	if (m_IsAttacking && !m_IsHurt) {
 		currentState = "attacking";
 		if (currentState != m_LastState) {
 			if (m_IsAttacking) m_Animation->SetProps("boss1", 3, 10, 150, 8);
@@ -187,7 +187,7 @@ void Enemy_Boss1::AnimationState()
 		}
 	}
 	//hurting	
-	if (m_IsHurt && !m_IsRunning && !m_IsAttacking) {
+	if (m_IsHurt) {
 		currentState = "hurt";
 		if (currentState != m_LastState) {
 			m_Animation->SetProps("boss1", 4, 4, 250, 8, 2);
@@ -244,7 +244,7 @@ bool Enemy_Boss1::Attack(float dt) {
 Collider* Enemy_Boss1::AttackZone(float dt) {
 	
 	if (m_IsAttacking && m_Animation->getSpriteFrame() >= m_AttackBeginFrames && m_Animation->getSpriteFrame() <= m_AttackFinishFrames) {
-		std::cout << m_Animation->getSpriteFrame() << std::endl;
+		//std::cout << m_Animation->getSpriteFrame() << std::endl;
 		if (m_attackCollider == NULL) {
 			m_attackCollider = new Collider();
 		}

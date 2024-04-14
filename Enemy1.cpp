@@ -46,14 +46,14 @@ void Enemy1::Draw()
 	
 	if (m_attackCollider != NULL) {
 		SDL_Rect box1 = m_attackCollider->Get();
-		SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box1);
+		//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box1);
 	}
 	
 	//TextureManager::GetInstance()->Draw("enemy_bar", m_Transform->X + 70, m_Transform->Y + 43, 29, 5);
 	m_HealthBar->Draw();
 	//box.x -= cam.X;
 	//box.y -= cam.Y;
-	SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
+	//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
 
 }
 
@@ -96,7 +96,7 @@ void Enemy1::Update(float dt) {
 	m_RigidBody->UnSetForce();
 
 	//m_Flip = SDL_FLIP_NONE;
-	m_RigidBody->ApplyForce(m_Direction * RUN_FORCE);
+	if(!m_IsAttacking && !m_IsHurt) m_RigidBody->ApplyForce(m_Direction * RUN_FORCE);
 
 	m_RigidBody->Update(dt);
 	m_LastSafePosition.X = m_Transform->X;
@@ -171,7 +171,7 @@ void Enemy1::AnimationState()
 		}
 	}
 	//hurting
-	if (m_IsHurt && !m_IsRunning && !m_IsAttacking) {
+	if (m_IsHurt) {
 		currentState = "hurt";
 		if (currentState != m_LastState) {
 			m_Animation->SetProps("skeleton_hurt", 1, 4, 100, 4);

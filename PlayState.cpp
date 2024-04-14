@@ -26,20 +26,34 @@ bool PlayState::OnEnter() {
     TextureManager::GetInstance()->Load("boss1", "assets\\BringerOfDeath\\SpriteSheet\\BringerofDeathSpritSheet.png");
     //thanh mau
     TextureManager::GetInstance()->Load("enemy_bar", "assets\\enemy_Bar.png");
-    TextureManager::GetInstance()->Load("none_bar", "assets\\None_Healthbar.png");
-    TextureManager::GetInstance()->Load("player_fullhealth", "assets\\Full_HealthBar.png");
-    TextureManager::GetInstance()->Load("heart", "assets\\Heart.png");
+    TextureManager::GetInstance()->Load("none_bar", "assets\\None_HealthBar1.png");
+    TextureManager::GetInstance()->Load("player_fullhealth", "assets\\Full_HealthBar1.png");
+    //TextureManager::GetInstance()->Load("heart", "assets\\Heart.png");
     //skill
     TextureManager::GetInstance()->Load("skill_1", "assets\\skill_1.png");
-    TextureManager::GetInstance()->Load("healing", "assets\\skills\\96x96\\skill_icons10.png");
+    TextureManager::GetInstance()->Load("healingicon", "assets\\skills\\48x48\\skill_icons10.png");
+    TextureManager::GetInstance()->Load("cd_healingicon", "assets\\skills\\48x48\\skill_icons10_cooldown.png");
+    TextureManager::GetInstance()->Load("gravityskill", "assets\\Gravity.png");
+    TextureManager::GetInstance()->Load("gravityicon", "assets\\skills\\48x48\\skill_icons24.png");
+    TextureManager::GetInstance()->Load("cd_gravityicon", "assets\\skills\\48x48\\skill_icons24_cooldown.png");
+    TextureManager::GetInstance()->Load("slashskill", "assets\\bigslash.png");
+    TextureManager::GetInstance()->Load("slashicon", "assets\\skills\\48x48\\skill_icons51.png");
+    TextureManager::GetInstance()->Load("cd_slashicon", "assets\\skills\\48x48\\skill_icons51_cooldown.png");
+    TextureManager::GetInstance()->Load("hasagiicon", "assets\\skills\\48x48\\skill_icons43.png");
+    TextureManager::GetInstance()->Load("cd_hasagiicon", "assets\\skills\\48x48\\skill_icons43_cooldown.png");
+    TextureManager::GetInstance()->Load("u_key", "assets\\U-Key.png");
+    TextureManager::GetInstance()->Load("i_key", "assets\\I-Key.png");
+
+    //UI
+    
 
     m_Warrior = new Warrior(new Properties("player_idle", 350, 100, 80, 80));
-    m_playerheal = new HealthBar(new Properties("none_bar", 50, 50, 120, 20),m_Warrior->getmaxHealth());
+    m_playerheal = new HealthBar(new Properties("none_bar", 10, 10, 240, 27),m_Warrior->getmaxHealth());
 
     //m_Enemies.push_back(new Enemy1(new Properties("skeleton_idle", 100, 200, 150, 150)));
 
-    m_Enemies.push_back(new Enemy1(new Properties("skeleton_idle", 300, 500, 150, 150)));
-    m_Enemies.push_back(new Enemy_Boss1(new Properties("boss1", 400 ,500, 140, 93)));
+    //m_Enemies.push_back(new Enemy1(new Properties("skeleton_idle", 300, 500, 150, 150)));
+    //m_Enemies.push_back(new Enemy_Boss1(new Properties("boss1", 400 ,500, 140, 93)));
     map = new Map();
     return true;
 }
@@ -58,7 +72,7 @@ bool PlayState::OnExit() {
 void PlayState::Render() {
     TextureManager::GetInstance()->Draw("background", 0, 0, 1390, 640);
     map->DrawMap();
-    TextureManager::GetInstance()->Draw("heart", 20, 50, 23, 21);
+    //TextureManager::GetInstance()->Draw("heart", 20, 50, 23, 21);
     m_playerheal->Draw(); 
     
     FontManager::GetInstance()->RenderText("score", "SCORES: ", 20, 100, { 255, 255, 255, 255 });
@@ -74,10 +88,10 @@ void PlayState::Render() {
 void PlayState::Update(float dt) {
 
     m_SpawnTimer += dt;
-    //if (m_SpawnTimer >= 50.0f) {
-    //    SpawnEnemy();
-    //    m_SpawnTimer = 0.0f; // Đặt lại biến đếm
-    //}
+    if (m_SpawnTimer >= 100.0f) {
+        SpawnEnemy();
+        m_SpawnTimer = 0.0f; // Đặt lại biến đếm
+    }
     if (Input::GetInstance()->GetKeyDown(SDL_SCANCODE_ESCAPE)) {
         printf("play to pause\n");
         Engine::GetInstance()->getStateMachine()->pushState(new PauseState());
@@ -91,18 +105,22 @@ void PlayState::Update(float dt) {
         }
     }
     m_Warrior->Update(dt);
-    if (Input::GetInstance()->GetKeyDown(SDL_SCANCODE_K)) {
+    //skill hasagi
+    if (m_Warrior->canUseHasage() && Input::GetInstance()->GetKeyDown(SDL_SCANCODE_O)) {
         printf("play to specialability\n");
         Engine::GetInstance()->getStateMachine()->pushState(new SpecialAbilityState());
         m_Warrior->setisSkill_Hasagi(true);
     }
+    //--------------------------
     Collider* player_attackZone = m_Warrior->getAttackZone();
+    Collider* gravityskillZone = m_Warrior->getGravityZone();
+    Collider* hasagiskillZone = NULL;
+    Collider* slashskillZone = m_Warrior->getSlashZone();
+    if(m_Warrior->getHasagiSkill()!=NULL) hasagiskillZone = m_Warrior->getHasagiSkill()->getAttackZone();
     if (player_attackZone != NULL) {
-        std::cout << player_attackZone->Get().w << std::endl;
+        //std::cout << player_attackZone->Get().w << std::endl;
     }
         for (int j = 0; j < m_Enemies.size(); j++) {
-            
-            
             //Follow
             m_Enemies[j]->Follow_Warrior(m_Warrior->getPosition());
 
@@ -110,6 +128,17 @@ void PlayState::Update(float dt) {
                 // Nếu nhân vật đang tấn công và va chạm với kẻ thù, gây sát thương cho kẻ thù
                 m_Enemies[j]->receiveDamage(m_Warrior->getDamage());
             }
+
+            if (gravityskillZone != NULL && CollisionHandler::GetInstance()->CheckCollision(gravityskillZone->Get(), m_Enemies[j]->getCollider()->Get())) {
+                m_Enemies[j]->receiveDamage(m_Warrior->getGravitySkillDamage());
+            }
+            if (hasagiskillZone != NULL && CollisionHandler::GetInstance()->CheckCollision(hasagiskillZone->Get(), m_Enemies[j]->getCollider()->Get())) {
+                m_Enemies[j]->receiveDamage(m_Warrior->getHasagiSkill()->getDamage());
+            }
+            if (slashskillZone != NULL && CollisionHandler::GetInstance()->CheckCollision(slashskillZone->Get(), m_Enemies[j]->getCollider()->Get())) {
+                m_Enemies[j]->receiveDamage(m_Warrior->getSlashSkillDamage());
+            }
+
             Collider* enemy_attackZone = m_Enemies[j]->AttackZone(dt);
             if (enemy_attackZone != NULL && CollisionHandler::GetInstance()->CheckCollision(enemy_attackZone->Get(), m_Warrior->getCollider()->Get()))
             {
@@ -143,7 +172,7 @@ void PlayState::Update(float dt) {
 
 void PlayState::SpawnEnemy() {
     // Tạo ra một số ngẫu nhiên từ 0 đến 100
-    int randomNum = rand() % 50;
+    int randomNum = rand() % 100;
 
     // Xác định loại quái dựa trên số ngẫu nhiên
     std::string enemyType;
@@ -151,7 +180,7 @@ void PlayState::SpawnEnemy() {
         enemyType = "skeleton_idle";
     }
     else {
-        // Thêm các loại quái khác ở đây
+        enemyType = "boss1";
     }
 
     // Tạo ra một số ngẫu nhiên cho vị trí X và Y của quái
@@ -166,7 +195,12 @@ void PlayState::SpawnEnemy() {
     } while (CollisionHandler::GetInstance()->MapCollision(enemyCollider->Get()));
 
     // Thêm quái vào danh sách
-    m_Enemies.push_back(new Enemy1(new Properties(enemyType, randomX, randomY, 150, 150)));
+    if (enemyType == "skeleton_idle") {
+        m_Enemies.push_back(new Enemy1(new Properties(enemyType, randomX, randomY, 150, 150)));
+    }
+    else if (enemyType == "boss1") {
+        m_Enemies.push_back(new Enemy_Boss1(new Properties(enemyType, randomX, randomY, 140, 93)));
+    }
 }
 
 

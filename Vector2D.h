@@ -40,6 +40,10 @@ public:
 		return *this;
 	}
 
+	float Length() {
+		return sqrt(X * X + Y * Y);
+	}
+
 	static float Distance(const Vector2D& v1, const Vector2D& v2)
 	{
 		float dx = v2.X - v1.X;

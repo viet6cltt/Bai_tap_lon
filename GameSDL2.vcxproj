@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>E:\Game\GameSDL\GameSDL2\SDL2_ttf-2.22.0\include;E:\Game\GameSDL;E:\Game\GameSDL\GameSDL2\SDL2-2.28.5\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Game\GameSDL\GameSDL2\SDL2_ttf-2.22.0\lib\x64;E:\Game\GameSDL\GameSDL2\SDL2-2.28.5\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\Game\GameSDL\GameSDL2\SDL2_mixer-2.8.0\include;E:\Game\GameSDL\GameSDL2\SDL2_ttf-2.22.0\include;E:\Game\GameSDL;E:\Game\GameSDL\GameSDL2\SDL2-2.28.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\Game\GameSDL\GameSDL2\SDL2_mixer-2.8.0\lib\x64;E:\Game\GameSDL\GameSDL2\SDL2_ttf-2.22.0\lib\x64;E:\Game\GameSDL\GameSDL2\SDL2-2.28.5\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -109,13 +109,13 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>E:\Game\GameSDL\GameSDL2\SDL2-2.28.5\lib\x64\optional;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Game\GameSDL\GameSDL2\SDL2_mixer-2.8.0\lib\x64\optional;E:\Game\GameSDL\GameSDL2\SDL2-2.28.5\lib\x64\optional;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>E:\Game\GameSDL\GameSDL2\SDL2_ttf-2.22.0\lib\x64;E:\Game\GameSDL\GameSDL2\SDL2-2.28.5\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\Game\GameSDL\GameSDL2\SDL2_mixer-2.8.0\lib\x64;E:\Game\GameSDL\GameSDL2\SDL2_ttf-2.22.0\lib\x64;E:\Game\GameSDL\GameSDL2\SDL2-2.28.5\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -154,6 +154,7 @@
     <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="Skill_Hasagi.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SpecialAbiliyState.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="Skill.h" />
     <ClInclude Include="Skill_Hasagi.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SpecialAbiliyState.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Timer.h" />

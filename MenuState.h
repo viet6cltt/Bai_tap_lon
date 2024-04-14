@@ -8,6 +8,7 @@
 #include "Engine.h"
 #include "FontManager.h"
 #include <string>
+#include "SoundManager.h"
 
 class MenuState : public GameState{
 public:

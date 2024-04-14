@@ -43,10 +43,8 @@ public:
 	virtual bool isAlive() override { return m_Health > 0; }
 
 	virtual void receiveDamage(int damage) override {
-		if (!m_IsAttacking) {
-			m_IsHurt = true;
-			m_FinishHurt = false;
-		}
+		m_IsHurt = true;
+		m_FinishHurt = false;
 		m_Health -= damage;
 	}
 	virtual void Follow_Warrior(Vector2D F);

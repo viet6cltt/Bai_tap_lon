@@ -8,7 +8,7 @@ Skill_Hasagi::Skill_Hasagi(Properties* props, int damage) : Skill(props), m_dama
 	m_RigidBody = new RigidBody();
 	m_IsDeleted = false;
 
-	m_LifeTime = 200.0f;
+	m_LifeTime = 120.0f;
 }
 
 void Skill_Hasagi::Activate(Vector2D Begin_Position, Vector2D direction)
@@ -19,6 +19,7 @@ void Skill_Hasagi::Activate(Vector2D Begin_Position, Vector2D direction)
 	m_Direction = m_Direction - m_Position;
 	//printf("toa do cua quai: %f %f\n", F.X, F.Y);
 	m_Direction = m_Direction.Normalize();
+	m_hasDealtDamage = false;
 }
 
 void Skill_Hasagi::Draw()
@@ -37,8 +38,9 @@ void Skill_Hasagi::Update(float dt)
 	m_RigidBody->Update(dt);
 	m_Transform->X += m_RigidBody->Position().X;
 	m_Transform->Y += m_RigidBody->Position().Y;
+	
+	m_Collider->SetBuffer(-10, -10, 20, 20);
 	m_Collider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
-	m_Collider->SetBuffer(0, 0, 0, 0);
 	
 	m_Animation->SetProps("skill_1", 1, 4, 250, 4);
 

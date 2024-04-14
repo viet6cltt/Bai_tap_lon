@@ -5,6 +5,9 @@ bool MenuState::OnEnter() {
     time = 0;
     printf("menu on enter\n");
 
+    SoundManager::GetInstance()->Load("menu_music", "assets\\menu_music.mp3", SOUND_MUSIC);
+    SoundManager::GetInstance()->PlayMusic("menu_music", -1);
+
     TextureManager::GetInstance()->Load("menu_background", "assets\\darkest.png");
 
     TextureManager::GetInstance()->Load("menu_play", "assets\\Menu Buttons\\Large Buttons\\Large Buttons\\Play Button.png");
@@ -25,6 +28,7 @@ bool MenuState::OnExit() {
         buttons[i]->Clean();
     }
     buttons.clear();
+    Mix_HaltMusic();
 
     //TextureManager::GetInstance()->clearFromTextureMap("menu_play");
     //TextureManager::GetInstance()->clearFromTextureMap("menu_quit");
