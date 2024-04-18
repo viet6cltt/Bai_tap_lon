@@ -13,10 +13,28 @@ class SoundManager
 {
 public:
 	static SoundManager* GetInstance() { return s_Instance = (s_Instance != nullptr) ? s_Instance : new SoundManager(); }
-	
 	bool Load(std::string ID, std::string soundPath, sound_type type, int volume = MIX_MAX_VOLUME);
 	void PlaySound(std::string ID, int loops = 0,int channel = -1);
 	void PlayMusic(std::string ID, int loops = 0);
+	void SetMasterVolume(int volume)
+	{
+		Mix_MasterVolume(volume);
+		Mix_VolumeMusic(volume);
+	}
+	int GetMasterVolume()
+	{
+		return Mix_MasterVolume(-1); 
+	}
+
+	void AdjustMasterVolume(int amount)
+	{
+		int currentVolume = GetMasterVolume();
+		int newVolume = currentVolume + amount;
+
+		newVolume = std::max(0, std::min(newVolume, MIX_MAX_VOLUME));
+
+		SetMasterVolume(newVolume);
+	}
 private:
 	SoundManager();
 	~SoundManager(){}

@@ -75,9 +75,6 @@
     <ClCompile Include="SpecialAbiliyState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Skill.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Skill_Hasagi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -85,6 +82,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FireSpell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pyromancer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Final_Boss.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GuideState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Obelysk.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -173,7 +185,7 @@
     <ClInclude Include="SpecialAbiliyState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Skill.h">
+    <ClInclude Include="RangedType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Skill_Hasagi.h">
@@ -183,6 +195,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SoundManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FireSpell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pyromancer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Final_Boss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GuideState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Obelysk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

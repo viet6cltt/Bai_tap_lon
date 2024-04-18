@@ -23,9 +23,18 @@ void HealthBar::Draw() {
 
         TextureManager::GetInstance()->Draw(m_Name, m_Rect.x, m_Rect.y, m_Rect.w, m_Rect.h);
         TextureManager::GetInstance()->Draw("player_fullhealth", healthBar.x, healthBar.y, healthBar.w, healthBar.h);
+        return;
+    }
+    if (m_Name == "final_boss_none_healthbar") {
+        SDL_Rect healthBar;
+        healthBar.x = m_Rect.x;
+        healthBar.y = m_Rect.y;
+        healthBar.w = m_Rect.w * percent; // Chiều rộng của thanh máu phụ thuộc vào lượng máu còn lại
+        healthBar.h = m_Rect.h;
         
+        TextureManager::GetInstance()->Draw(m_Name, m_Rect.x, m_Rect.y, m_Rect.w, m_Rect.h);
+        TextureManager::GetInstance()->Draw("final_boss_full_healthbar", healthBar.x, healthBar.y, healthBar.w, healthBar.h);
         
-
         return;
     }
     

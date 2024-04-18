@@ -3,6 +3,7 @@
 #include "GameState.h"
 #include "MenuButton.h"
 #include "PlayState.h"
+
 #include "GameStateMachine.h"
 #include <vector>
 #include "Engine.h"
@@ -32,6 +33,8 @@ public:
     static void s_exitFromMenu() {
         Engine::GetInstance()->Quit();
     }
+
+    static void s_menuToGuide();
 
 private:
     std::vector<MenuButton*> buttons;  // Danh sách các nút

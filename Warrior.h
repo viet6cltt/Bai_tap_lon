@@ -11,8 +11,8 @@
 #include "FontManager.h"
 #include "SpecialAbiliyState.h"
 
-#define ATTACK_TIME 30.0f
-#define RUN_FORCE 4.0f
+
+#define RUN_FORCE 2.5f
 
 class Warrior : public Character
 {
@@ -30,11 +30,7 @@ public:
 	int getmaxHealth() { return m_maxHealth; }
 	//get Damage
 	int getDamage() {
-		if (m_IsAttacking && !m_hasDealtDamage) {
-			m_hasDealtDamage = true;
-			return m_Damage;
-		}
-		return 0;
+		return m_Damage;
 	}
 	int getGravitySkillDamage() {
 		return m_GravityDamage;
@@ -96,13 +92,14 @@ public:
 	void HealingSkillHandler();
 	void GravitySkillHandler();
 	void SlashSkillHandler();
+	void HasagiSkillHandler(float dt);
+	void SlideSkillHandler();
 
 	bool isAlive() const { return m_Health > 0; }
 private:
 	void AnimationState();
 private:
 	bool m_IsRunning;
-
 	bool m_isSkill_Hasagi;
 	bool m_IsHurt;
 	bool m_FinishHurt;
@@ -132,16 +129,26 @@ private:
 
 	SDL_Rect m_Rect;
 	SDL_Point* center;
+	Vector2D force;
 
 	Skill_Hasagi* m_skill_Hasagi;
 
 	std::string m_LastState;
+	// slide skill
+	int m_SlideCooldown;
+	bool m_CanSlide;
+	int m_CurrentSlideCooldown;
+	bool m_IsSlide;
+	int m_SlideBeginTime;
+	int m_SlideCount;
+	Animation* m_SlideIconAnimation;
 	//healing skill
 	int m_HealingCooldown;
 	int m_CurrentHealingCooldown;
 	bool m_IsHealing;
 	int m_HealingBeginTime;
 	int m_HealingTimeBefore;
+	Animation* m_HealingIconAnimation;
 	//gravity skill
 	bool m_IsGravitySkill;//kiem soat viec gay damage, collider
 	bool m_CanUseGravity; //kiem soat viec co dung duoc skill khong
@@ -152,11 +159,13 @@ private:
 	int m_GravityBeginTime;
 	int m_GravityDamage;
 	Animation* m_GravitySkillAnimation;
+	Animation* m_GravityIconAnimation;
 	//hasagi skill
 	bool m_CanUseHasagi;
 	int m_HasagiCooldown;
 	int m_CurrentHasagiCooldown;
 	int m_HasagiBeginTime;
+	Animation* m_HasagiIconAnimation;
 	//bigslash skill
 	bool m_IsSlashSkill;//kiem soat viec gay damage, collider
 	bool m_CanUseSlash; //kiem soat viec co dung duoc skill khong
@@ -167,6 +176,7 @@ private:
 	int m_SlashBeginTime;
 	int m_SlashDamage;
 	Animation* m_SlashSkillAnimation;
+	Animation* m_SlashIconAnimation;
 	//sound
 	bool m_IsSoundPlay;
 

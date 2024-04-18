@@ -1,6 +1,6 @@
 ﻿#include "Skill_Hasagi.h"
 
-Skill_Hasagi::Skill_Hasagi(Properties* props, int damage) : Skill(props), m_damage(damage)
+Skill_Hasagi::Skill_Hasagi(Properties* props, int damage) : RangedType(props), m_damage(damage)
 {
 	m_manacost = 30;
 	m_Collider = new Collider;
@@ -13,7 +13,8 @@ Skill_Hasagi::Skill_Hasagi(Properties* props, int damage) : Skill(props), m_dama
 
 void Skill_Hasagi::Activate(Vector2D Begin_Position, Vector2D direction)
 {
-	//std::cout << "m_Position: " << Begin_Position.X << " " << Begin_Position.Y << std::endl;
+	//std::
+	//  << "m_Position: " << Begin_Position.X << " " << Begin_Position.Y << std::endl;
 	m_Position = Begin_Position;
 	m_Direction = direction;
 	m_Direction = m_Direction - m_Position;
@@ -56,7 +57,7 @@ void Skill_Hasagi::Update(float dt)
 
 void Skill_Hasagi::Clean()
 {
-	std::cout << "skill duoc xoa\n";
+	
 	delete m_Collider;
 	delete m_Animation;
 	delete m_RigidBody;

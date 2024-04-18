@@ -8,7 +8,7 @@
 #include "Map.h"
 
 #include "GameStateMachine.h"
-
+#include "SoundManager.h"
 #include "PauseState.h"
 #include "PlayState.h"
 #include "MenuState.h"
@@ -37,7 +37,7 @@ bool Engine::Init()
 		return false;
 	}
 
-	m_Window = SDL_CreateWindow("Wash Dishes", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+	m_Window = SDL_CreateWindow("Everpath", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 	if (m_Window == nullptr)
 	{
 		SDL_Log("Failed to creat Window: %s", SDL_GetError());
@@ -72,6 +72,16 @@ bool Engine::Init()
 
 void Engine::Update()
 {
+	if(Input::GetInstance()->GetKeyDown(SDL_SCANCODE_LCTRL)&&Input::GetInstance()->GetKeyDown(SDL_SCANCODE_M)){
+		std::cout << "dang tang am";
+		SoundManager::GetInstance()->AdjustMasterVolume(5);
+	}
+	else if(Input::GetInstance()->GetKeyDown(SDL_SCANCODE_LCTRL) && Input::GetInstance()->GetKeyDown(SDL_SCANCODE_N)){
+		std::cout << "dang giam am";
+		SoundManager::GetInstance()->AdjustMasterVolume(-5);
+	}
+
+
 	float dt = Timer::GetInstance()->GetDealtaTime();
 	//SDL_Log("%f", dt);
 	m_pGameStateMachine->Update(dt);
@@ -82,7 +92,7 @@ void Engine::Update()
 
 void Engine::Render()
 {
-	SDL_SetRenderDrawColor(m_Renderer, 124, 218, 254, 255); //set color
+	//SDL_SetRenderDrawColor(m_Renderer, 124, 218, 254, 255); //set color
 	SDL_RenderClear(m_Renderer); //clear the window to blank
 	
 	//menu->Render();

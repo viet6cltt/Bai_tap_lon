@@ -23,6 +23,7 @@ public:
 	int get_sprite() {
 		return m_FrameCount;
 	}
+	std::string getID() { return m_TextureID; }
 	void Start() {
 		m_StartTime = SDL_GetTicks();
 	}

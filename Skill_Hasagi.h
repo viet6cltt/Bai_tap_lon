@@ -1,21 +1,17 @@
 #pragma once
-#include "Skill.h"
+#include "RangedType.h"
 #include "Engine.h"
 
 #define RUN_FORCE 5.0f
 
-class Skill_Hasagi : public Skill
+class Skill_Hasagi : public RangedType
 {
 public:
 	Skill_Hasagi(Properties* props,int damage);
 
-	void setDamage(int damage) { m_damage = damage * 15; }
+	void setDamage(int damage) { m_damage = damage * 3; }
 	int getDamage() { 
-		if (!m_hasDealtDamage) {
-			m_hasDealtDamage = true;
 			return m_damage;
-		}
-		return 0;
 	}
 
 	virtual void Activate(Vector2D,Vector2D) override;

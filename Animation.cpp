@@ -5,9 +5,9 @@ void Animation::Update()
 {
 	//std::cout << SDL_GetTicks() << std::endl;
 
-	if (m_StartTime == 0) {
+	/*if (m_StartTime == 0) {
 		Start();
-	}
+	}*/
 
 	Uint32 elapsedTime = SDL_GetTicks() - m_StartTime;
 

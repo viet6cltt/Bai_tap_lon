@@ -27,6 +27,8 @@ private:
 
 	std::vector<MenuButton*> m_buttons;
 
+	bool is_Out;
+
 	
 };
 

@@ -42,11 +42,15 @@ public:
 	inline void setNormalSpeed() {
 		m_SpeedMultiplier = 1.0f;
 	}
-
+	
+	inline void SetVelocity(float x, float y) {
+		m_Velocity = x;
+		m_Velocity = y;
+	}
 	//Getters
 	inline float GetMass() { return m_Mass; }
 	inline Vector2D Position() { return m_Position; }
-	inline Vector2D Veclocity() { return m_Velocity; }
+	inline Vector2D Velocity() { return m_Velocity; }
 	inline Vector2D Accelaration() { return m_Accelaration; }
 
 	//Update method

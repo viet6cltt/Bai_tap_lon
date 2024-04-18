@@ -110,12 +110,15 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>E:\Game\GameSDL\GameSDL2\SDL2_mixer-2.8.0\lib\x64\optional;E:\Game\GameSDL\GameSDL2\SDL2-2.28.5\lib\x64\optional;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>E:\Game\GameSDL\GameSDL2\SDL2_mixer-2.8.0\lib\x64;E:\Game\GameSDL\GameSDL2\SDL2_ttf-2.22.0\lib\x64;E:\Game\GameSDL\GameSDL2\SDL2-2.28.5\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,18 +144,22 @@
     <ClCompile Include="Enemy1.cpp" />
     <ClCompile Include="Enemy_Boss1.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Final_Boss.cpp" />
+    <ClCompile Include="FireSpell.cpp" />
     <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="GameOverState.cpp" />
     <ClCompile Include="GameStateMachine.cpp" />
+    <ClCompile Include="GuideState.cpp" />
     <ClCompile Include="HealthBar.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MenuButton.cpp" />
     <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="Obelysk.cpp" />
     <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="PlayState.cpp" />
-    <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="Pyromancer.cpp" />
     <ClCompile Include="Skill_Hasagi.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SpecialAbiliyState.cpp" />
@@ -169,22 +176,27 @@
     <ClInclude Include="Enemy1.h" />
     <ClInclude Include="Enemy_Boss1.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="Final_Boss.h" />
+    <ClInclude Include="FireSpell.h" />
     <ClInclude Include="FontManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameOverState.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateMachine.h" />
+    <ClInclude Include="GuideState.h" />
     <ClInclude Include="HealthBar.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="IObject.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="MenuButton.h" />
+    <ClInclude Include="Obelysk.h" />
     <ClInclude Include="PauseState.h" />
     <ClInclude Include="PlayState.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="Pyromancer.h" />
     <ClInclude Include="RigidBody.h" />
-    <ClInclude Include="Skill.h" />
+    <ClInclude Include="RangedType.h" />
     <ClInclude Include="Skill_Hasagi.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SpecialAbiliyState.h" />
