@@ -1,7 +1,7 @@
 
 #ifndef INPUT_H
 #define INPUT_H
-
+#include <string>
 #include <SDL.h>
 
 enum Axis { HORIZONTAL, VERTICAL };
@@ -18,7 +18,7 @@ public:
 	bool GetLeftMouseButton();
 	int GetMouseX();
 	int GetMouseY();
-
+	
 
 	int GetAxisKey(Axis axis);
 

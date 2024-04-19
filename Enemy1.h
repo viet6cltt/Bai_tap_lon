@@ -28,10 +28,6 @@ public:
 		return m_Position;
 	}
 
-	virtual void setFollowDirection(Vector2D F) {
-		m_FollowDirection = F;
-	}
-
 
 private:
 

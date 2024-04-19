@@ -29,6 +29,9 @@ public:
 
 	GameStateMachine* getStateMachine() { return m_pGameStateMachine; }
 
+	void setPlayerType(int type) { player_type = type; }
+	int getPlayerType() { return player_type; }
+
 	void setMouse(int x,int y) {
 		mouseX = x;
 		mouseY = y;
@@ -40,6 +43,10 @@ public:
 		Mouse.Y = mouseY;
 		return Mouse;
 	}
+
+	int getScores() { return m_scores; }
+	void setScores(int score) { m_scores = score; }
+	
 private:
 	Engine() {}
 
@@ -49,8 +56,12 @@ private:
 	GameStateMachine* m_pGameStateMachine;
 	bool m_IsRunning;
 
+	int m_scores;
 	int mouseX, mouseY;
+	int screen_type;
+	int player_type;
 
+	
 };
 
 #endif

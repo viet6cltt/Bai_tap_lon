@@ -20,10 +20,8 @@ private:
 	static void s_resumePlay();
 
 	static const std::string s_specialabilityID;
-
-	bool m_MousePressedInThisState;
-
 	SDL_Texture* background;
+	bool m_MousePressedInThisState;
 	//std::vector<MenuButton*> m_buttons;
 
 

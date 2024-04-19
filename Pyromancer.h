@@ -33,19 +33,22 @@ public:
 		}
 		return NULL;
 	}
+
+	void DyingHandler();
+
 	virtual Collider* AttackZone(float dt) override { return m_attackCollider; }
 	virtual void Follow_Warrior(Vector2D F);
 
-	virtual bool isAlive() override { return m_Health > 0; }
+	virtual bool isAlive() override { 
+		if (m_FinishDying) {
+			return false;
+		}
+		return true;
+	}
 
 	virtual Vector2D getPosition() override {
 		return m_Position;
 	}
-
-	virtual void setFollowDirection(Vector2D F) {
-		m_FollowDirection = F;
-	}
-
 	virtual void Attack();
 private:
 	
@@ -63,6 +66,7 @@ private:
 	SDL_Rect m_Rect;
 	Vector2D m_FollowDirection;
 	Vector2D m_Direction;
+	Vector2D m_attackDirection;
 	float dt = 0;
 	SDL_Point* center;
 

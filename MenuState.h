@@ -2,7 +2,8 @@
 
 #include "GameState.h"
 #include "MenuButton.h"
-#include "PlayState.h"
+#include "ChoosePlayerState.h"
+
 
 #include "GameStateMachine.h"
 #include <vector>
@@ -26,8 +27,8 @@ public:
 
     // Các phương thức khác của lớp Menu
 
-    static void s_menuToPlay() {
-        Engine::GetInstance()->getStateMachine()->changeState(new PlayState());
+    static void s_menuToChoosePlayer() {
+        Engine::GetInstance()->getStateMachine()->changeState(new ChoosePlayerState());
     }
 
     static void s_exitFromMenu() {
@@ -38,5 +39,5 @@ public:
 
 private:
     std::vector<MenuButton*> buttons;  // Danh sách các nút
-    int time;
+    int highest_scores;
 };

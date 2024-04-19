@@ -32,7 +32,7 @@ public:
 	Vector2D& Normalize()
 		{
 		float length = sqrt(X * X + Y * Y);
-		if (length > 0) {   // we never want to divide by zero
+		if (length > 0) {  
 			float invLength = 1.0f / length;
 			X *= invLength;
 			Y *= invLength;
@@ -43,14 +43,12 @@ public:
 	float Length() {
 		return sqrt(X * X + Y * Y);
 	}
-
 	static float Distance(const Vector2D& v1, const Vector2D& v2)
 	{
 		float dx = v2.X - v1.X;
 		float dy = v2.Y - v1.Y;
 		return sqrt(dx * dx + dy * dy);
 	}
-
 };
 
 #endif

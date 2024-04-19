@@ -11,18 +11,27 @@
 
 Warrior::Warrior(Properties* props) : Character(props)
 {
-	m_maxHealth = 2000;
-	m_Health = 2000;
-	m_Damage = 100;
-
+	Player_type = Engine::GetInstance()->getPlayerType();
+	if (Player_type == 1) {
+		
+		m_maxHealth = MAX_HEALTH_PLAYER1;
+		m_attackRate = ATTACK_RATE_PLAYER1;
+		m_RunForce = RUN_FORCE_PLAYER1;
+		m_Damage = DAMAGE_PLAYER1;
+	}
+	else if (Player_type == 2){
+		
+		m_maxHealth = MAX_HEALTH_PLAYER2;
+		m_attackRate = ATTACK_RATE_PLAYER2;
+		m_RunForce = RUN_FORCE_PLAYER2;
+		m_Damage = DAMAGE_PLAYER2;
+	}
+	m_Health = m_maxHealth;
 	m_IsRunning = false;
 	m_CanAttack = true;
 	m_IsAttacking = false;
 	m_IsCrouching = false;
 	m_IsHurt = false;
-	center = new SDL_Point;
-	center->x = 56;
-	center->y = m_Height / 2;
 	m_IsSoundPlay = false;
 	m_Flip = SDL_FLIP_NONE;
 
@@ -45,12 +54,15 @@ Warrior::Warrior(Properties* props) : Character(props)
 	m_HealingCooldown = 10;
 	m_CurrentHealingCooldown = 0;
 	m_GravityCooldown = 25;
-	m_GravityDamage = 7;
+	m_GravityDamage = m_Damage / 30;
 	m_HasagiCooldown = 15;
 	m_CanUseGravity = true;
 	m_CanUseHasagi = true;
 	m_SlashCooldown = 20;
-	m_SlashDamage = 15;
+	if (Player_type == 1) {
+		m_SlashDamage = m_Damage / 12;
+	}else m_SlashDamage = m_Damage / 21;
+	
 	m_CanUseSlash = true;
 
 	m_SlideCooldown = 2;
@@ -90,7 +102,7 @@ void Warrior::Draw()
 {
 	m_Animation->Draw(m_Transform->X, m_Transform->Y, m_Width, m_Height, m_Flip,center);
 	if (m_GravitySkillAnimation != NULL) {
-		m_GravitySkillAnimation->Draw(m_Transform->X-100, m_Transform->Y-80, 288, 240);
+		m_GravitySkillAnimation->Draw(m_Transform->X-50, m_Transform->Y-40, 288, 240);
 	}
 
 	if (m_SlashSkillAnimation != NULL) {
@@ -102,11 +114,11 @@ void Warrior::Draw()
 	}
 	
 	//Vector2D cam = Camera::GetInstance()->GetPosition();
-	SDL_Rect box = m_Collider->Get();
+	//SDL_Rect box = m_Collider->Get();
 	//attack box
 	if (m_attackCollider != NULL){
 		SDL_Rect attackbox = m_attackCollider->Get();
-		SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &attackbox);
+		//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &attackbox);
 	}
 	//gravity box
 	if (m_GravitySkillCollider != NULL) {
@@ -116,74 +128,62 @@ void Warrior::Draw()
 	//slash box
 	if (m_SlashSkillCollider != NULL) {
 		SDL_Rect slashbox = m_SlashSkillCollider->Get();
-		SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &slashbox);
+		//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &slashbox);
 	}
 
 	//box.x -= cam.X;
 	//box.y -= cam.Y;
-	SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
+	//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
 
 	//skill icon
-	/*if(m_CanUseSlash) TextureManager::GetInstance()->Draw("slashicon", 284, 30, 48, 48);
-	else TextureManager::GetInstance()->Draw("cd_slashicon", 284, 30, 48, 48);
-	if(m_IsHealing) TextureManager::GetInstance()->Draw("cd_healingicon", 353, 30, 48, 48);
-	else TextureManager::GetInstance()->Draw("healingicon", 353, 30, 48, 48);
-	if(m_CanUseGravity) TextureManager::GetInstance()->Draw("gravityicon", 421, 30, 48, 48);
-	else TextureManager::GetInstance()->Draw("cd_gravityicon", 421, 30, 48, 48);
-	TextureManager::GetInstance()->Draw("u_key", 275, 604, 32, 32);
-	if(m_CanUseHasagi) TextureManager::GetInstance()->Draw("hasagiicon", 489, 30, 48, 48);
-	else TextureManager::GetInstance()->Draw("cd_hasagiicon", 489, 30, 48, 48);*/
 	if (m_SlideIconAnimation != NULL)
 	{
-		m_SlideIconAnimation->Draw(550, 17, 72, 72);
+		m_SlideIconAnimation->Draw(550, 652, 72, 72);
 	}
 	if (m_HealingIconAnimation != NULL) {
-		m_HealingIconAnimation->Draw(353, 17, 72, 72);
+		m_HealingIconAnimation->Draw(353, 652, 72, 72);
 	}
 	if (m_GravityIconAnimation != NULL) {
-		m_GravityIconAnimation->Draw(421, 17, 72, 72);
+		m_GravityIconAnimation->Draw(421, 652, 72, 72);
 	}
 	if (m_SlashIconAnimation != NULL) {
-		m_SlashIconAnimation->Draw(284, 17, 72, 72);
+		m_SlashIconAnimation->Draw(284, 652, 72, 72);
 	}
 	if (m_HasagiIconAnimation != NULL) {
-		m_HasagiIconAnimation->Draw(489, 17, 72, 72);
+		m_HasagiIconAnimation->Draw(489, 652, 72, 72);
 	}
 
 	//slide cooldown font
 	if (m_CurrentSlideCooldown == 0) {
-		FontManager::GetInstance()->RenderText("slideskill_cooldown", "READY", 550 + 12 - 10, 5, { 255,255,255,255 });
+		FontManager::GetInstance()->RenderText("slideskill_cooldown", "READY", 550 + 10, 652 - 12, { 255,255,255,255 });
 	}
 	else {
-		FontManager::GetInstance()->RenderText("slideskill_cooldown", std::to_string(m_SlideCooldown - m_CurrentSlideCooldown).c_str(), 550 + 12 + 15, 5, { 255,255,255,255 });
+		FontManager::GetInstance()->RenderText("slideskill_cooldown", std::to_string(m_SlideCooldown - m_CurrentSlideCooldown).c_str(), 550 + 12 + 15, 652 - 12, { 255,255,255,255 });
 	}
 	//healing cooldown font
 	if (m_CurrentHealingCooldown == 0) {
-		FontManager::GetInstance()->RenderText("healingskill_cooldown","READY", 353 - 10, 5, {255,255,255,255});
-	}else FontManager::GetInstance()->RenderText("healingskill_cooldown", std::to_string(m_HealingCooldown - m_CurrentHealingCooldown).c_str(), 353 + 15, 5, { 255,255,255,255 });
+		FontManager::GetInstance()->RenderText("healingskill_cooldown","READY", 353 +10, 652 - 12, {255,255,255,255});
+	}else FontManager::GetInstance()->RenderText("healingskill_cooldown", std::to_string(m_HealingCooldown - m_CurrentHealingCooldown).c_str(), 353+ 12 + 15, 652 - 12, { 255,255,255,255 });
 	//gravity cooldown font
 	if (m_CurrentGravityCooldown == 0) {
-		FontManager::GetInstance()->RenderText("gravityskill_cooldown", "READY", 421 - 10, 5, { 255,255,255,255 });
+		FontManager::GetInstance()->RenderText("gravityskill_cooldown", "READY", 421 + 10, 652 - 12, { 255,255,255,255 });
 	}
-	else FontManager::GetInstance()->RenderText("gravityskill_cooldown", std::to_string(m_GravityCooldown - m_CurrentGravityCooldown).c_str(), 421 + 15, 5, { 255,255,255,255 });
+	else FontManager::GetInstance()->RenderText("gravityskill_cooldown", std::to_string(m_GravityCooldown - m_CurrentGravityCooldown).c_str(), 421 + 12 + 15, 652 - 12, { 255,255,255,255 });
 	//hasagi cooldown font
 	if (m_CurrentHasagiCooldown == 0) {
-		FontManager::GetInstance()->RenderText("hasagiskill_cooldown", "READY", 489 - 10, 5, { 255,255,255,255 });
+		FontManager::GetInstance()->RenderText("hasagiskill_cooldown", "READY", 489 + 10, 652 - 12, { 255,255,255,255 });
 	}
-	else FontManager::GetInstance()->RenderText("hasagiskill_cooldown", std::to_string(m_HasagiCooldown - m_CurrentHasagiCooldown).c_str(), 489 + 15, 5, { 255,255,255,255 });
+	else FontManager::GetInstance()->RenderText("hasagiskill_cooldown", std::to_string(m_HasagiCooldown - m_CurrentHasagiCooldown).c_str(), 489 + 12 + 15, 652 - 12, { 255,255,255,255 });
 	//slash cooldown font
 	if (m_CurrentSlashCooldown == 0) {
-		FontManager::GetInstance()->RenderText("slashskill_cooldown", "READY", 284 - 10, 5, { 255,255,255,255 });
+		FontManager::GetInstance()->RenderText("slashskill_cooldown", "READY", 284 + 10, 652 - 12, { 255,255,255,255 });
 	}
-	else FontManager::GetInstance()->RenderText("slashskill_cooldown", std::to_string(m_SlashCooldown - m_CurrentSlashCooldown).c_str(), 284 + 15, 5, { 255,255,255,255 });
+	else FontManager::GetInstance()->RenderText("slashskill_cooldown", std::to_string(m_SlashCooldown - m_CurrentSlashCooldown).c_str(), 284 + 12 + 15, 652 - 12, { 255,255,255,255 });
 }
 
 
 void Warrior::Update(float dt)
 {
-	std::cout << m_SlashIconAnimation->getSpriteFrame() << std::endl;
-	//m_Health -= dt;
-	//printf("mau: %d\n", m_Health);
 	Warrior_VoiceHanlder();
 
 	if (isAlive() == false) {
@@ -231,7 +231,7 @@ void Warrior::Update(float dt)
 		// Chuan hoa vector 
 		if (force.Length() > 0) {
 			force.Normalize();
-			force = force * RUN_FORCE;
+			force = force * m_RunForce;
 			m_RigidBody->ApplyForce(force);
 		}
 	}
@@ -338,7 +338,6 @@ void Warrior::Update(float dt)
 	m_HealingIconAnimation->Update();
 }
 
-
 Collider* Warrior::AttackZone(float dt)
 {
 	if (m_IsAttacking && m_Animation->getSpriteFrame() >= 11 && m_Animation->getSpriteFrame() <= 14) {
@@ -443,11 +442,13 @@ void Warrior::AnimationState()
 	std::string currentState;
 	
 	//idle
+
 	if (!m_IsRunning && !m_IsAttacking && !m_IsHurt) {
 		currentState = "idle";
 		if (currentState != m_LastState) {
 			//m_Animation->SetProps("player", 1, 9, 120, 9);
-			m_Animation->SetProps("player_idle", 1, 14, 120, 14);
+			if(Player_type == 1) m_Animation->SetProps("player1_idle", 1, 14, 120, 14);
+			else  m_Animation->SetProps("player2_idle", 1, 14, 120, 14);
 			m_Animation->Start();
 		}
 	}
@@ -456,8 +457,8 @@ void Warrior::AnimationState()
 	if (m_IsRunning && !m_IsAttacking && !m_IsHurt) {
 		currentState = "running";
 		if (currentState != m_LastState) {
-			//m_Animation->SetProps("player", 2, 6, 120, 6);
-			m_Animation->SetProps("player_running", 1, 6, 120, 6);
+			if(Player_type == 1) m_Animation->SetProps("player1_running", 1, 6, 120, 6);
+			else m_Animation->SetProps("player2_running", 1, 6, 120, 6);
 			m_Animation->Start();
 		}
 	}
@@ -468,7 +469,8 @@ void Warrior::AnimationState()
 		currentState = "attacking";
 		if (currentState != m_LastState) {
 			//m_Animation->SetProps("player", 3, 12, 30, 12);
-			m_Animation->SetProps("player_attacking", 1, 38, 40, 38);
+			if(Player_type==1) m_Animation->SetProps("player1_attacking", 1, 38, m_attackRate, 38);
+			else m_Animation->SetProps("player2_attacking", 1, 38, m_attackRate, 38);
 			m_Animation->Start();
 		}
 	}
@@ -477,7 +479,6 @@ void Warrior::AnimationState()
 	if (m_IsHurt && !m_IsRunning && !m_IsAttacking) {
 		currentState = "hurt";
 		if (currentState != m_LastState) {
-			//m_Animation->SetProps("player", 4, 5, 120, 5);
 			m_Animation->Start();
 		}
 	}
@@ -499,7 +500,8 @@ void Warrior::AnimationState()
 	}
 	if (m_IsSlide) {
 		//m_Animation->SetProps("player", 2, 6, 120, 6);
-		m_Animation->SetProps("player_running", 1, 6, 120, 6);
+		if (Player_type == 1) m_Animation->SetProps("player1_running", 1, 6, 120, 6);
+		else m_Animation->SetProps("player2_running", 1, 6, 120, 6);
 		m_Animation->Start();
 	}
 	m_LastState = currentState;
@@ -591,7 +593,7 @@ void Warrior::GravitySkillHandler() {
 		}
 	}
 	else if (m_GravitySkillCollider != NULL) {
-		m_GravitySkillCollider->SetBuffer(-20, -20, 40, 40);
+		m_GravitySkillCollider->SetBuffer(-80, -80, 80, 60);
 		m_GravitySkillCollider->Set(m_Transform->X - 100, m_Transform->Y - 80, 288, 240);
 	}
 }

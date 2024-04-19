@@ -21,9 +21,6 @@ public:
     void Update(float dt);
 
     virtual std::string getStateID() const { return s_gameoverID; }
-
-    // Các phương thức khác của lớp Menu
-
     static void s_toMenu() {
         Engine::GetInstance()->getStateMachine()->changeState(new MenuState());
     }
@@ -33,7 +30,7 @@ public:
     }
 
 private:
-    std::vector<MenuButton*> buttons;  // Danh sách các nút
+    std::vector<MenuButton*> buttons; 
     static const std::string s_gameoverID;
 };
 

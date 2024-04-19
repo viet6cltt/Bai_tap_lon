@@ -2,7 +2,6 @@
 
 Skill_Hasagi::Skill_Hasagi(Properties* props, int damage) : RangedType(props), m_damage(damage)
 {
-	m_manacost = 30;
 	m_Collider = new Collider;
 	m_Animation = new Animation;
 	m_RigidBody = new RigidBody();
@@ -27,8 +26,8 @@ void Skill_Hasagi::Draw()
 {
 	if(m_Animation != NULL) m_Animation->Draw(m_Transform->X, m_Transform->Y, m_Width, m_Height);
 
-	SDL_Rect box = m_Collider->Get();
-	SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
+	/*SDL_Rect box = m_Collider->Get();
+	SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);*/
 }
 
 void Skill_Hasagi::Update(float dt)

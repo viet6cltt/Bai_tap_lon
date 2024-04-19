@@ -5,6 +5,7 @@
 #include "GameOverState.h"
 #include "CollisionHandler.h"
 #include <cstdlib>
+#include "VictoryState.h"
 const std::string PlayState::s_playID = "PLAY";
 Map* map = NULL;
 bool PlayState::OnEnter() {
@@ -17,12 +18,18 @@ bool PlayState::OnEnter() {
     FontManager::GetInstance()->LoadFont("score", "assets\\ExpressionPro.ttf", 40);
     FontManager::GetInstance()->LoadFont("m_score", "assets\\ExpressionPro.ttf", 40);
     //player
-    TextureManager::GetInstance()->Load("background", "assets\\Background_2.png");
-    TextureManager::GetInstance()->Load("player", "assets\\NightBorne\\NightBorne.png");
-    TextureManager::GetInstance()->Load("player", "assets\\NightBorne\\NightBorne.png");
-    TextureManager::GetInstance()->Load("player_idle", "assets\\player_idle.png");
-    TextureManager::GetInstance()->Load("player_attacking", "assets\\player_attacking.png");
-    TextureManager::GetInstance()->Load("player_running", "assets\\player_running.png");
+    TextureManager::GetInstance()->Load("playstate_background", "assets\\playstate_background.png");
+    if (Engine::GetInstance()->getPlayerType() == 1) {
+        TextureManager::GetInstance()->Load("player1_idle", "assets\\player1_idle.png");
+        TextureManager::GetInstance()->Load("player1_attacking", "assets\\player1_attacking.png");
+        TextureManager::GetInstance()->Load("player1_running", "assets\\player1_running.png");
+    }
+    else {
+        TextureManager::GetInstance()->Load("player2_idle", "assets\\player2_idle.png");
+        TextureManager::GetInstance()->Load("player2_attacking", "assets\\player2_attacking.png");
+        TextureManager::GetInstance()->Load("player2_running", "assets\\player2_running.png");
+    }
+    
 
     //Enemy1
     TextureManager::GetInstance()->Load("skeleton_idle", "assets\\Monsters_Creatures_Fantasy\\Skeleton\\Idle.png");
@@ -34,9 +41,9 @@ bool PlayState::OnEnter() {
     TextureManager::GetInstance()->Load("pyromancer_hurt", "assets\\Pyromancer_hurt.png");
     TextureManager::GetInstance()->Load("pyromancer_run", "assets\\Pyromancer_run.png");
     TextureManager::GetInstance()->Load("pyromancer_attack", "assets\\Pyromancer_attack.png");
+    TextureManager::GetInstance()->Load("pyromancer_dying", "assets\\Pyromancer_dying.png");
 
-    //Boss1
-    TextureManager::GetInstance()->Load("boss1", "assets\\BringerOfDeath\\SpriteSheet\\BringerofDeathSpritSheet.png");
+    
     //Final_Boss
     TextureManager::GetInstance()->Load("final_boss_1_idle", "assets\\final_boss_1_idle.png");
     TextureManager::GetInstance()->Load("final_boss_1_run", "assets\\final_boss_1_running.png");
@@ -46,11 +53,11 @@ bool PlayState::OnEnter() {
     TextureManager::GetInstance()->Load("final_boss_2_idle", "assets\\final_boss_2_idle.png");
     TextureManager::GetInstance()->Load("final_boss_2_run", "assets\\final_boss_2_running.png");
     TextureManager::GetInstance()->Load("final_boss_2_attack", "assets\\final_boss_2_attacking.png");
-    TextureManager::GetInstance()->Load("final_boss_1_dying", "assets\\final_boss_2_dying.png");
+    TextureManager::GetInstance()->Load("final_boss_2_dying", "assets\\final_boss_2_dying.png");
     TextureManager::GetInstance()->Load("final_boss_1_casting", "assets\\final_boss_1_casting.png");
     TextureManager::GetInstance()->Load("final_boss_2_casting", "assets\\final_boss_2_casting.png");
+    
     //fire spell
-    //TextureManager::GetInstance()->Load("zendo_boss", "assets\\Zendo_idle.png");
     TextureManager::GetInstance()->Load("fire_spell", "assets\\fire_spell.png");
     //thanh mau
     TextureManager::GetInstance()->Load("enemy_bar", "assets\\enemy_Bar.png");
@@ -80,8 +87,8 @@ bool PlayState::OnEnter() {
     //UI
     TextureManager::GetInstance()->Load("obelisk", "assets\\Obelisk.png");
 
-    m_Warrior = new Warrior(new Properties("player_idle", 350, 100, 130, 130));
-    m_playerheal = new HealthBar(new Properties("none_bar", 10, 10, 240, 27),m_Warrior->getmaxHealth());
+    m_Warrior = new Warrior(new Properties("player", 350, 100, 130, 130));
+    m_playerheal = new HealthBar(new Properties("none_bar", 10, 680, 240, 27),m_Warrior->getmaxHealth());
 
     //m_Enemies.push_back(new Enemy1(new Properties("skeleton_idle", 100, 200, 150, 150)));
 
@@ -106,33 +113,37 @@ bool PlayState::OnExit() {
 }
 void PlayState::Render() {
     
-    TextureManager::GetInstance()->Draw("background", 0, 0, 1390, 640);
+    TextureManager::GetInstance()->Draw("playstate_background", 0, 0, 1280, 720);
     map->DrawMap();
     //TextureManager::GetInstance()->Draw("heart", 20, 50, 23, 21);
     m_playerheal->Draw(); 
     if (m_Obelysk != NULL) m_Obelysk->Draw();
-    FontManager::GetInstance()->RenderText("score", "SCORES: ", 20, 100, { 255, 255, 255, 255 });
-    FontManager::GetInstance()->RenderText("m_score", std::to_string(m_Score).c_str(), 150, 100, { 255, 255, 255, 255 });
+    FontManager::GetInstance()->RenderText("score", "SCORES: ", 20, 640, { 255, 255, 255, 255 });
+    FontManager::GetInstance()->RenderText("m_score", std::to_string(m_Score).c_str(), 150, 640, { 255, 255, 255, 255 });
     
     m_Warrior->Draw();
 
     for (int i = 0; i < m_Enemies.size(); i++) {
         m_Enemies[i]->Draw();
     }
-    
 }
 
 void PlayState::Update(float dt) {
- 
     m_SpawnTimer += dt;
-    //if (m_SpawnTimer >= 100.0f) {
-    //    SpawnEnemy();
-    //    m_SpawnTimer = 0.0f; // Đặt lại biến đếm
-    //}
+    /*if (m_SpawnTimer >= 100.0f) {
+        SpawnEnemy();
+        m_SpawnTimer = 0.0f; 
+    }*/
     if (m_Enemies.empty()) {
         if(m_Score<40) Lv1();
-        else if (m_Score < 80) {
+        else if (m_Score < 100) {
             Lv2();
+        }
+        else if (m_Score < 180) {
+            Lv3();
+        }
+        else if(m_Score < 400){
+            Lv4();
         }
     }
     if (Input::GetInstance()->GetKeyDown(SDL_SCANCODE_ESCAPE)) {
@@ -171,6 +182,10 @@ void PlayState::Update(float dt) {
         //std::cout << player_attackZone->Get().w << std::endl;
     }
         for (int j = 0; j < m_Enemies.size(); j++) {
+            if (m_Enemies[j]->getIsAttack() == false) {
+                m_Enemies[j]->Follow_Warrior(m_Warrior->getPosition());
+            }
+            
             if (m_Enemies[j]->getCollider() != NULL && player_attackZone!=NULL&&CollisionHandler::GetInstance()->CheckCollision(player_attackZone->Get(), m_Enemies[j]->getCollider()->Get())) {
                 // Nếu nhân vật đang tấn công và va chạm với kẻ thù, gây sát thương cho kẻ thù
                 m_Enemies[j]->receiveDamage("normal", m_Warrior->getDamage());
@@ -196,10 +211,6 @@ void PlayState::Update(float dt) {
             
             m_Enemies[j]->Update(dt);
             Collider* enemy_attackZone = m_Enemies[j]->getattackZone();
-                
-            if (m_Enemies[j]->getIsAttack()==false) {
-                m_Enemies[j]->Follow_Warrior(m_Warrior->getPosition());
-            }
             if (enemy_attackZone != NULL && CollisionHandler::GetInstance()->CheckCollision(enemy_attackZone->Get(), m_Warrior->getCollider()->Get()))
             {
                 m_Warrior->receiveDamage(m_Enemies[j]->getDamage());
@@ -230,12 +241,18 @@ void PlayState::Update(float dt) {
                     m_Score += 10;
                 }
                 else if (dynamic_cast<Enemy_Boss1*>(m_Enemies[i])) {
-                    m_Score += 50;
+                    m_Score += 100;
                 }
                 else if (dynamic_cast<Final_Boss*>(m_Enemies[i])) {
-                    m_Score += 500;
+                    m_Score += 300;
                     delete m_Obelysk;
                     m_Obelysk = NULL;
+                    Engine::GetInstance()->setScores(m_Score);
+                    Engine::GetInstance()->getStateMachine()->changeState(new VictoryState());
+                    
+                }
+                else if (dynamic_cast<Pyromancer*>(m_Enemies[i])) {
+                    m_Score += 40;
                 }
                 m_Enemies[i]->Clean();
                 m_Enemies.erase(m_Enemies.begin() + i);
@@ -243,9 +260,10 @@ void PlayState::Update(float dt) {
             }
         }
         if (!m_Warrior->isAlive()) {
-            // Nếu Warrior đã chết, chuyển sang MenuState
+            Engine::GetInstance()->setScores(m_Score);
             Engine::GetInstance()->getStateMachine()->changeState(new GameOverState());
         }
+       
 
 }
 
@@ -284,20 +302,39 @@ void PlayState::SpawnEnemy() {
 
 
 void PlayState::Lv1() {
-    /*int y = 100;
+   /* int y = 100;
     for (int i = 0; i < 4; i++) {
         m_Enemies.push_back(new Enemy1(new Properties("skeleton_idle", 900, y, 150, 150)));
         y += 100;
     }
     m_Enemies.push_back(new Pyromancer(new Properties("pyromacer_idle", 900,300, 80, 80)));*/
-    m_Obelysk = new Obelysk(new Properties("obselysk_idle", 1000, 300, 80, 80));
-    m_Enemies.push_back(new Final_Boss(new Properties("final_boss_1_idle", 700, 300, 220, 220)));
-
+    m_Obelysk = new Obelysk(new Properties("obselysk_idle", 600, 320, 80, 80));
+    //m_Enemies.push_back(new Final_Boss(new Properties("final_boss_1_idle", 700, 300, 220, 220)));
+    //m_Enemies.push_back(new Enemy_Boss1(new Properties("boss1", 600, 300, 280, 186)));
+    m_Enemies.push_back(new Enemy1(new Properties("skeleton_idle", 500, 320, 150, 150)));
+    m_Enemies.push_back(new Enemy1(new Properties("skeleton_idle", 700, 320, 150, 150)));
+    m_Enemies.push_back(new Enemy1(new Properties("skeleton_idle", 600, 220, 150, 150)));
+    m_Enemies.push_back(new Enemy1(new Properties("skeleton_idle", 600, 420, 150, 150)));
+    //m_Enemies.push_back(new Enemy_Boss1(new Properties("boss1", 700, 220, 280, 186)));
 }
-void PlayState::Lv2() {
-    //int y = 200;
+void PlayState::Lv2(){
     //m_Enemies.push_back(new Enemy_Boss1(new Properties("boss1", 600, y, 280, 186)));
     //int y1 = 100;
-    
+    m_Enemies.push_back(new Enemy1(new Properties("skeleton_idle", 500, 320, 150, 150)));
+    m_Enemies.push_back(new Enemy1(new Properties("skeleton_idle", 700, 320, 150, 150)));
+    m_Enemies.push_back(new Pyromancer(new Properties("pyromacer_idle", 600, 220, 80, 80)));
+    m_Enemies.push_back(new Pyromancer(new Properties("pyromacer_idle", 600, 420, 80, 80)));
+    //m_Enemies.push_back(new Final_Boss(new Properties("final_boss_1_idle", 700, 300, 220, 220)));
+}
+
+void PlayState::Lv3() {
+    m_Enemies.push_back(new Enemy_Boss1(new Properties("boss1", 700, 220, 280, 186)));
+    m_Enemies.push_back(new Pyromancer(new Properties("pyromacer_idle", 600, 220, 80, 80)));
+    m_Enemies.push_back(new Pyromancer(new Properties("pyromacer_idle", 600, 420, 80, 80)));
+}
+
+void PlayState::Lv4()
+{
     m_Enemies.push_back(new Final_Boss(new Properties("final_boss_1_idle", 700, 300, 220, 220)));
 }
+

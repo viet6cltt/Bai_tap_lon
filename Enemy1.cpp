@@ -15,8 +15,8 @@ Enemy1::Enemy1(Properties* props) : Enemy(props)
 	m_hasReceivedDamage["slash"] = false;
 	m_hasReceivedDamage["gravity"] = false;
 	m_hasReceivedDamage["hasagi"] = false;
-	m_Health = 1000;
-	m_Damage = 150;
+	m_Health = 4000;
+	m_Damage = 200;
 	m_IsRunning = false;
 
 	m_IsAttacking = false;
@@ -44,18 +44,18 @@ void Enemy1::Draw()
 {
 	m_Animation->Draw(m_Transform->X, m_Transform->Y, m_Width, m_Height, m_Flip, center);
 	//Vector2D cam = Camera::GetInstance()->GetPosition();
-	SDL_Rect box = m_Collider->Get();
+	//SDL_Rect box = m_Collider->Get();
 	
-	if (m_attackCollider != NULL) {
+	/*if (m_attackCollider != NULL) {
 		SDL_Rect box1 = m_attackCollider->Get();
 		SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box1);
-	}
+	}*/
 	
 	//TextureManager::GetInstance()->Draw("enemy_bar", m_Transform->X + 70, m_Transform->Y + 43, 29, 5);
 	m_HealthBar->Draw();
 	//box.x -= cam.X;
 	//box.y -= cam.Y;
-	SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
+	//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
 
 }
 
@@ -90,7 +90,7 @@ void Enemy1::Update(float dt) {
 
 	m_RigidBody->UnSetForce();
 
-	if(!m_IsAttacking && !m_IsHurt) m_RigidBody->ApplyForce(m_Direction * RUN_FORCE);
+	if(!m_IsHurt && !m_IsAttacking) m_RigidBody->ApplyForce(m_Direction * RUN_FORCE);
 
 	/*--------------------------xu li bi thuong-----------------------*/
 	if (m_IsHurt) {
@@ -117,8 +117,6 @@ void Enemy1::Update(float dt) {
 	if (CollisionHandler::GetInstance()->MapCollision(m_Collider->Get())) {
 		m_Transform->X = m_LastSafePosition.X;
 	}
-	
-
 	m_RigidBody->Update(dt);
 	m_LastSafePosition.Y = m_Transform->Y;
 	m_Transform->Y += m_RigidBody->Position().Y;
@@ -166,7 +164,7 @@ void Enemy1::AnimationState()
 	if (m_IsAttacking && !m_IsHurt) {
 		currentState = "attacking";
 		if (currentState != m_LastState) {
-			m_Animation->SetProps("skeleton_attack", 1, 8, 250, 8);
+			m_Animation->SetProps("skeleton_attack", 1, 8, 150, 8);
 			m_Animation->Start();
 		}
 	}

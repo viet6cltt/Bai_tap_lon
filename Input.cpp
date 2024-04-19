@@ -81,4 +81,3 @@ int Input::GetMouseY()
 	SDL_GetMouseState(NULL, &y);
 	return y;
 }
-

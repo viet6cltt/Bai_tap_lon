@@ -11,8 +11,14 @@
 #include "FontManager.h"
 #include "SpecialAbiliyState.h"
 
-
-#define RUN_FORCE 2.5f
+#define MAX_HEALTH_PLAYER1 2000
+#define MAX_HEALTH_PLAYER2 3000
+#define ATTACK_RATE_PLAYER1 40
+#define ATTACK_RATE_PLAYER2 70
+#define DAMAGE_PLAYER1 150
+#define DAMAGE_PLAYER2 300
+#define RUN_FORCE_PLAYER1 4.0f
+#define RUN_FORCE_PLAYER2 3.0f
 
 class Warrior : public Character
 {
@@ -99,6 +105,9 @@ public:
 private:
 	void AnimationState();
 private:
+	int m_RunForce;
+	int m_attackRate;
+	int Player_type;
 	bool m_IsRunning;
 	bool m_isSkill_Hasagi;
 	bool m_IsHurt;

@@ -10,7 +10,7 @@ void SpecialAbilityState::s_resumePlay()
 
 bool SpecialAbilityState::OnEnter()
 {
-	SDL_Surface* screenshot = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
+	SDL_Surface* screenshot = SDL_CreateRGBSurface(0, SCREEN_WIDTH, 720, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
 	SDL_RenderReadPixels(Engine::GetInstance()->GetRenderer(), NULL, SDL_PIXELFORMAT_ARGB8888, screenshot->pixels, screenshot->pitch);
 	background = SDL_CreateTextureFromSurface(Engine::GetInstance()->GetRenderer(), screenshot);
 	SDL_FreeSurface(screenshot);

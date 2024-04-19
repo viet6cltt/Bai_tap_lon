@@ -23,6 +23,7 @@ Final_Boss::Final_Boss(Properties* props) : Enemy(props)
 	m_DiedTimeBegin = 0;
 	m_RevivingWaiting = false;
 	cast_type = 0;
+	//m_PathFinder = new PathFinder(m_map);
 	TextureManager::GetInstance()->Load("final_boss_1_dying", "assets\\final_boss_1_dying.png");
 	m_IsReviving = false;
 
@@ -32,6 +33,9 @@ Final_Boss::Final_Boss(Properties* props) : Enemy(props)
 	m_IsCasting = false;
 	Type = 1;
 
+	m_FinishDyingType2 = false;
+	m_IsDyingType2 = false;
+
 	m_IsAttacking = false;
 
 	m_CanAttack = true;
@@ -40,6 +44,8 @@ Final_Boss::Final_Boss(Properties* props) : Enemy(props)
 	m_Flip = SDL_FLIP_NONE;
 
 	m_Collider = new Collider();
+	m_Collider->SetBuffer(-60, -70, 140, 90);
+	m_Collider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
 	m_attackCollider = NULL;
 	m_HealthBar = new HealthBar(new Properties("final_boss_none_healthbar", 382, 550, 516, 48), MAX_HEALTH_TYPE1);
 
@@ -54,13 +60,13 @@ void Final_Boss::Draw()
 {
 	if(m_Animation != NULL) m_Animation->Draw(m_Transform->X, m_Transform->Y, m_Width, m_Height, m_Flip, NULL);
 	//Vector2D cam = Camera::GetInstance()->GetPosition();
-	SDL_Rect box = { 0,0,0,0 };
-	if(m_Collider != NULL) box = m_Collider->Get();
+	//SDL_Rect box = { 0,0,0,0 };
+	//if(m_Collider != NULL) box = m_Collider->Get();
 
-	if (m_attackCollider != NULL) {
+	/*if (m_attackCollider != NULL) {
 		SDL_Rect box1 = m_attackCollider->Get();
 		SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box1);
-	}
+	}*/
 
 	//TextureManager::GetInstance()->Draw("enemy_bar", m_Transform->X + 70, m_Transform->Y + 43, 29, 5);
 	if (m_HealthBar != NULL) {
@@ -68,7 +74,7 @@ void Final_Boss::Draw()
 	}
 	//box.x -= cam.X;
 	//box.y -= cam.Y;
-	SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
+	//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
 }
 
 void Final_Boss::Update(float dt) {
@@ -80,22 +86,17 @@ void Final_Boss::Update(float dt) {
 	CastingHandler();
 	AttackHandler();
 	AttackZone(dt);
+	
 	//-----------xu li di chuyen------------------------
 	m_RigidBody->UnSetForce();
-	if (m_IsRunning && !m_IsDyingType1 && !m_IsReviving && !m_RevivingWaiting&&!m_IsCasting) {
+	if (m_IsRunning && !m_IsDyingType1 && !m_IsReviving && !m_RevivingWaiting&&!m_IsCasting && !m_IsDyingType2) {
 		m_RigidBody->ApplyForce(m_Direction * RUN_FORCE);
 	}
 	//--------------------------------------------
-	m_RigidBody->Update(dt);
-	m_LastSafePosition.X = m_Transform->X;
-	m_Transform->X += m_RigidBody->Position().X;
-	
-	m_RigidBody->Update(dt);
-	m_LastSafePosition.Y = m_Transform->Y;
-	m_Transform->Y += m_RigidBody->Position().Y;
-
-	
 	if (m_Collider != NULL) {
+		m_RigidBody->Update(dt);
+		m_LastSafePosition.X = m_Transform->X;
+		m_Transform->X += m_RigidBody->Position().X;
 		if (m_Flip == SDL_FLIP_NONE) {
 			m_Collider->SetBuffer(-60, -70, 140, 90);
 		}
@@ -106,8 +107,17 @@ void Final_Boss::Update(float dt) {
 		if (CollisionHandler::GetInstance()->MapCollision(m_Collider->Get())) {
 			m_Transform->X = m_LastSafePosition.X;
 		}
-
-
+		//theo y
+		m_RigidBody->Update(dt);
+		m_LastSafePosition.Y = m_Transform->Y;
+		m_Transform->Y += m_RigidBody->Position().Y;
+		if (m_Flip == SDL_FLIP_NONE) {
+			m_Collider->SetBuffer(-60, -70, 140, 90);
+		}
+		else {
+			m_Collider->SetBuffer(-60, -70, 140, 90);
+		}
+		m_Collider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
 		if (CollisionHandler::GetInstance()->MapCollision(m_Collider->Get())) {
 			m_Transform->Y = m_LastSafePosition.Y;
 		}
@@ -115,7 +125,7 @@ void Final_Boss::Update(float dt) {
 	
 	m_Origin->X = m_Transform->X + m_Width / 2;
 	m_Origin->Y = m_Transform->Y + m_Height / 2;
-
+	
 	//----------------------------------------------
 	if (Type == 1 && m_Health < 0) {
 		m_Health = 0;
@@ -131,8 +141,8 @@ void Final_Boss::Update(float dt) {
 		SoundManager::GetInstance()->PlaySound("final_boss_1_dying", 0, 12);
 		
 	}
-	if (Type == 2 && m_Health <= 0) {
-		Clean();
+	if (Type == 2 && m_Health <= 0 && m_IsDyingType2==false) {
+		m_IsDyingType2 = true;
 	}
 	DyingHandler();
 	RevivingHandler();
@@ -145,10 +155,11 @@ void Final_Boss::Update(float dt) {
 void Final_Boss::AnimationState()
 {
 	if (m_Animation != NULL) {
+		
 		std::string currentState;
 		//idle
 
-		if (!m_IsRunning && !m_IsAttacking && !m_IsDyingType1 && !m_IsReviving && !m_IsCasting) {
+		if (!m_IsRunning && !m_IsAttacking && !m_IsDyingType1 && !m_IsReviving && !m_IsCasting && !m_IsDyingType2) {
 			currentState = "idle";
 			if (currentState != m_LastState) {
 				if (Type == 1) {
@@ -164,7 +175,7 @@ void Final_Boss::AnimationState()
 
 		//running
 
-		if (m_IsRunning && !m_IsAttacking && !m_IsDyingType1 && !m_IsReviving) {
+		if (m_IsRunning && !m_IsAttacking && !m_IsDyingType1 && !m_IsReviving && !m_IsDyingType2) {
 			currentState = "running";
 			if (currentState != m_LastState) {
 				if (Type == 1) {
@@ -177,19 +188,19 @@ void Final_Boss::AnimationState()
 			}
 		}
 		//attacking
-		if (m_IsAttacking && !m_IsRunning && !m_IsDyingType1 && !m_IsReviving) {
+		if (m_IsAttacking && !m_IsRunning && !m_IsDyingType1 && !m_IsReviving && !m_IsDyingType2) {
 			currentState = "attacking";
 			if (currentState != m_LastState) {
 				if (Type == 1) {
 					m_Animation->SetProps("final_boss_1_attack", 1, 22, 90, 22);
 				}
 				else if (Type == 2) {
-					m_Animation->SetProps("final_boss_2_attack", 1, 25, 150, 25);
+					m_Animation->SetProps("final_boss_2_attack", 1, 25, 90, 25);
 				}
 				m_Animation->Start();
 			}
 		}
-		if (m_IsCasting && !m_IsReviving && !m_IsRunning && !m_IsDyingType1 && !m_IsAttacking) {
+		if (m_IsCasting && !m_IsReviving && !m_IsRunning && !m_IsDyingType1 && !m_IsAttacking && !m_IsDyingType2) {
 			currentState = "casting";
 			if (currentState != m_LastState) {
 				if (Type == 1) {
@@ -202,17 +213,24 @@ void Final_Boss::AnimationState()
 			}
 		}
 		//dying
-		if (m_IsDyingType1 && !m_IsReviving) {
+		if (m_IsDyingType1 && !m_IsReviving && !m_IsDyingType2) {
 			currentState = "dyingtype1";
 			if (currentState != m_LastState) {
-				m_Animation->SetProps("final_boss_1_dying", 1, 22, 150, 22);
+				m_Animation->SetProps("final_boss_1_dying", 1, 22, 200, 22);
 				m_Animation->Start();
 			}
 		}
-		if (m_IsReviving) {
+		if (m_IsReviving && !m_IsDyingType2) {
 			currentState = "reviving";
 			if (currentState != m_LastState) {
 				m_Animation->SetProps("final_boss_reviving", 1, 19, 150, 19);
+				m_Animation->Start();
+			}
+		}
+		if (m_IsDyingType2) {
+			currentState = "dyingtype2";
+			if (currentState != m_LastState) {
+				m_Animation->SetProps("final_boss_2_dying", 1, 19, 300, 19);
 				m_Animation->Start();
 			}
 		}
@@ -226,12 +244,19 @@ void Final_Boss::AnimationState()
 
 void Final_Boss::Follow_Warrior(Vector2D F) {
 	
-	m_Position.X = m_Origin->X;
-	m_Position.Y = m_Origin->Y;
-	//std::cout << m_Origin->X << " " << m_Origin->Y << std::endl;
-	m_Direction = F - m_Position;
+	if (m_Collider != NULL) {
+		m_Position.X = m_Collider->Get().x + (float)m_Collider->Get().w / 2;
+		m_Position.Y = m_Collider->Get().y + (float)m_Collider->Get().h / 2;
 
-	m_Direction = m_Direction.Normalize();
+		//std::cout << m_Origin->X << " " << m_Origin->Y << std::endl;
+		m_Direction = F - m_Position;
+		m_Direction = m_Direction.Normalize();
+		//std::cout << m_Collider->Get().w << " " << m_Collider->Get().h << "\n";
+		//m_Direction = m_PathFinder->GetDirection(m_PathFinder->FindShortestPath(m_Position, F, m_Collider), m_Collider, m_Position);
+	}
+	
+	//std::cout << m_Direction.X << " " << m_Direction.Y << std::endl;
+	//std::cout << m_Direction.X<<" "<<m_Direction.Y << std::endl;
 
 	m_IsRunning = true;
 	if (m_Direction.X > 0) {
@@ -245,26 +270,71 @@ void Final_Boss::Follow_Warrior(Vector2D F) {
 Collider* Final_Boss::AttackZone(float dt) {
 
 	if (m_IsAttacking) {
-		if ((Type == 1 && m_Animation->getSpriteFrame() >= 16 && m_Animation->getSpriteFrame() <= 18)||(Type == 2 && m_Animation->getSpriteFrame() >= 7 && m_Animation->getSpriteFrame() <= 20)) {
+		if ((Type == 1 && m_Animation->getSpriteFrame() >= 16 && m_Animation->getSpriteFrame() <= 18)) {
 			if (m_attackCollider == NULL) {
 				m_attackCollider = new Collider();
 			}
-			if (Type == 1) {
-				
-				m_attackCollider->SetBuffer(-20, -60, 40, 70);
-				m_attackCollider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
-			}
-			else if (Type == 2) {
+			m_attackCollider->SetBuffer(-20, -60, 40, 70);
+			m_attackCollider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
+		}
+
+		if (Type == 2) {
+			if (m_Animation->getSpriteFrame() >= 7 && m_Animation->getSpriteFrame() <= 9) {
+				if (m_attackCollider == NULL) {
+					m_attackCollider = new Collider();
+				}
 				if (m_Flip == SDL_FLIP_NONE) {
 					m_attackCollider->SetBuffer(-60, -70, 70, 90);
 				}
 				else {
 					m_attackCollider->SetBuffer(-10, -70, 100, 90);
 				}
-				
 				m_attackCollider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
 			}
-			
+			if (m_Animation->getSpriteFrame() == 10) {
+				if (m_attackCollider != NULL) {
+					delete m_attackCollider;
+					m_attackCollider = NULL;
+				}
+			}
+			if (m_Animation->getSpriteFrame() >= 10 && m_Animation->getSpriteFrame() <= 13) {
+				if (m_attackCollider == NULL) {
+					m_attackCollider = new Collider();
+				}
+				if (m_Flip == SDL_FLIP_NONE) {
+					m_attackCollider->SetBuffer(-60, -70, 70, 90);
+				}
+				else {
+					m_attackCollider->SetBuffer(-10, -70, 100, 90);
+				}
+
+				m_attackCollider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
+			}
+			if (m_Animation->getSpriteFrame() == 14) {
+				if (m_attackCollider != NULL) {
+					delete m_attackCollider;
+					m_attackCollider = NULL;
+				}
+			}
+			if (m_Animation->getSpriteFrame() >= 16 && m_Animation->getSpriteFrame() <= 20) {
+				if (m_attackCollider == NULL) {
+					m_attackCollider = new Collider();
+				}
+				if (m_Flip == SDL_FLIP_NONE) {
+					m_attackCollider->SetBuffer(-60, -70, 70, 90);
+				}
+				else {
+					m_attackCollider->SetBuffer(-10, -70, 100, 90);
+				}
+
+				m_attackCollider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
+			}
+			if (m_Animation->getSpriteFrame() == 21) {
+				if (m_attackCollider != NULL) {
+					delete m_attackCollider;
+					m_attackCollider = NULL;
+				}
+			}
 		}
 	}
 	return m_attackCollider;
@@ -313,7 +383,18 @@ void Final_Boss::DyingHandler() {
 		delete m_Animation;
 		m_Animation = NULL;
 	}
-	
+	if (m_IsDyingType2) {
+		m_IsRunning = false;
+		m_IsAttacking = false;
+		m_IsCasting = false;
+		m_IsDyingType1 = false;
+	}
+	if (m_IsDyingType2 && m_Animation->getSpriteFrame() == 18 && !m_FinishDyingType2) {
+		m_FinishDyingType2 = true;
+		m_IsDyingType2 = false;
+		delete m_Animation;
+		m_Animation = NULL;
+	}
 }
 
 void Final_Boss::RevivingHandler() {

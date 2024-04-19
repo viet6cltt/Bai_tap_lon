@@ -31,13 +31,16 @@ Engine* Engine::s_Instance = nullptr;
 //MenuState* m_pMenuObj2 = nullptr;
 bool Engine::Init()
 {
+	m_scores = 0;
+	player_type = 0;
+	screen_type = 1;
 	if (SDL_Init(SDL_INIT_VIDEO) != 0 && IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) != 0)
 	{
 		SDL_Log("Failed to initialize SDL: %s", SDL_GetError());
 		return false;
 	}
 
-	m_Window = SDL_CreateWindow("Everpath", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+	m_Window = SDL_CreateWindow("Everpath", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 1);
 	if (m_Window == nullptr)
 	{
 		SDL_Log("Failed to creat Window: %s", SDL_GetError());
@@ -57,16 +60,7 @@ bool Engine::Init()
 	m_pGameStateMachine = new GameStateMachine();
 	m_pGameStateMachine->changeState(new MenuState());
 
-	//menu = new MenuState();
-	//menu->OnEnter();
-
-	//map = new Map();
-
-	//player = new Warrior(Properties("player_idle", 350, 100, 120, 80));
-
-
-
-	//Camera::GetInstance()->SetTarget(player->GetOrigin());
+	
 	return m_IsRunning = true;
 }
 

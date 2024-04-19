@@ -6,6 +6,13 @@ Obelysk::Obelysk(Properties* props) : Enemy(props) {
 	m_FinishAttack = false;
 	m_CanAttack = true;
 	m_Animation = new Animation();
+	m_Damage = 300;
+	m_Position.X = m_Transform->X + m_Width / 2;
+	m_Position.Y = m_Transform->Y + m_Height / 2;
+	
+
+	
+	
 	TextureManager::GetInstance()->Load("obelysk_idle", "assets\\obelysk_idle.png");
 	TextureManager::GetInstance()->Load("obelysk_attacking", "assets\\obelysk_attacking.png");
 	TextureManager::GetInstance()->Load("obelysk_dying", "assets\\obelysk_dying.png");
@@ -13,12 +20,13 @@ Obelysk::Obelysk(Properties* props) : Enemy(props) {
 
 void Obelysk::Draw() {
 	m_Animation->Draw(m_Transform->X, m_Transform->Y, m_Width, m_Height);
-
+	
 }
 
 void Obelysk::Update(float dt) {
 	AttackHandler();
 	m_Animation->Update();
+
 	AnimationState();
 }
 
@@ -46,13 +54,16 @@ void Obelysk::AnimationState() {
 			m_Animation->Start();
 		}
 	}
+	
 	m_LastState = currentState;
 }
 
 void Obelysk::AttackHandler() {
-	if (m_IsAttacking && m_FinishAttack == false) {
+	if (m_IsAttacking&& m_FinishAttack == false) {
+
 		if (m_Animation->getSpriteFrame() == 11) {
 			m_FinishAttack = true;
+
 		}
 	}
 	if (m_Animation != NULL && m_IsAttacking&& m_FinishAttack && m_Animation->getSpriteFrame() != 11) {
@@ -60,6 +71,7 @@ void Obelysk::AttackHandler() {
 		m_FinishAttack = false;
 		m_CanAttack = true;
 	}
+	
 }
 
 void Obelysk::DyingHandler() {

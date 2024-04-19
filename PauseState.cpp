@@ -30,7 +30,7 @@ void PauseState::Update(float dt)
 
 void PauseState::Render() 
 {
-	TextureManager::GetInstance()->Draw("pause_background", 0, 0, 1280, 640);
+	TextureManager::GetInstance()->Draw("pause_background", 0, 0, 1280, 720);
 	for (int i = 0; i < m_buttons.size(); i++) {
 		m_buttons[i]->Draw();
 	}
@@ -38,7 +38,6 @@ void PauseState::Render()
 
 bool PauseState::OnEnter() 
 {
-	is_Out = false;
 	TextureManager::GetInstance()->Load("pause_background", "assets\\pause_background.png");
 
 	TextureManager::GetInstance()->Load("menu_resume", "assets\\Menu Buttons\\Large Buttons\\Large Buttons\\Resume Button.png");

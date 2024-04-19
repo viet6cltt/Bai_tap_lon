@@ -16,7 +16,5 @@ public:
 	virtual void Draw() = 0;
 protected:
 	std::string m_Name;
-	float m_manacost;
-	float m_Cooldown;
 };
 

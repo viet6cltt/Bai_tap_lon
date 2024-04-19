@@ -48,11 +48,12 @@ public:
 	virtual Vector2D getPosition() override {
 		return m_Position;
 	}
-
-	virtual void setFollowDirection(Vector2D F){}
 private:
 	Animation* m_Animation;
 	RigidBody* m_RigidBody;
 	Vector2D m_Position;
+
+	int m_AttackBeginTime;
+	
 };
 

@@ -83,7 +83,6 @@ public:
 	virtual void Follow_Warrior(Vector2D F) = 0;
 
 	virtual bool isAlive() = 0;
-	virtual void setFollowDirection(Vector2D F) = 0;
 protected:
 	FireSpell* m_FireSpell;
 	bool m_IsRunning;
@@ -96,6 +95,7 @@ protected:
 	bool m_FinishAttack;
 
 	bool m_IsDying;
+	bool m_FinishDying;
 
 	Collider* m_attackCollider;
 

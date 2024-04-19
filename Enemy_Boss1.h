@@ -23,18 +23,20 @@ public:
 	virtual Collider* AttackZone(float dt) override;
 	
 
-	virtual bool isAlive() override { return m_Health > 0; }
+	virtual bool isAlive() override { 
+		if (m_FinishDying) {
+			return false;
+		}
+		return true;
+	}
 
-	
+	void DyingHandler();
 	virtual void Follow_Warrior(Vector2D F);
 
 	virtual Vector2D getPosition() override {
 		return m_Position;
 	}
 
-	virtual void setFollowDirection(Vector2D F) {
-		m_FollowDirection = F;
-	}
 private:
 
 	bool hasFlipped;

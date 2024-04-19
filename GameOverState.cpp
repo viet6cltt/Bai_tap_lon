@@ -1,10 +1,26 @@
 ﻿#include "GameOverState.h"
-
+#include <fstream>
 const std::string GameOverState::s_gameoverID = "GAMEOVER";
 bool GameOverState::OnEnter() {
     printf("gameover on enter\n");
 
-    TextureManager::GetInstance()->Load("gameover_background", "assets\\GAME OVER.png");
+    std::ifstream file;
+    file.open("assets\\scores.txt");
+    if (file.is_open()) {
+        int n;
+        file >> n;
+        file.close();
+        if (n < Engine::GetInstance()->getScores()) {
+            std::ofstream file;
+            file.open("assets\\scores.txt", std::ios::out);
+            if (file.is_open()) {
+                
+                file << Engine::GetInstance()->getScores();
+                file.close();
+            }
+        }
+    }
+    TextureManager::GetInstance()->Load("gameover_background", "assets\\gameoverstate_background.png");
 
     TextureManager::GetInstance()->Load("menu_quit", "assets\\Menu Buttons\\Large Buttons\\Large Buttons\\Exit Button.png");
     TextureManager::GetInstance()->Load("menu_quit_hover", "assets\\Menu Buttons\\Large Buttons\\Colored Large Buttons\\Exit  col_Button.png");
@@ -12,8 +28,8 @@ bool GameOverState::OnEnter() {
     TextureManager::GetInstance()->Load("menu_menu", "assets\\Menu Buttons\\Large Buttons\\Large Buttons\\Menu Button.png");
     TextureManager::GetInstance()->Load("menu_menu_hover", "assets\\Menu Buttons\\Large Buttons\\Colored Large Buttons\\Menu  col_Button.png");
 
-    buttons.push_back(new MenuButton(new Properties("menu_menu", 100, 200, 300, 100), s_toMenu));
-    buttons.push_back(new MenuButton(new Properties("menu_quit", 1280 - (100 + 300), 200, 300, 100), s_exitFromGameOver));
+    buttons.push_back(new MenuButton(new Properties("menu_menu", 70, 200, 300, 100), s_toMenu));
+    buttons.push_back(new MenuButton(new Properties("menu_quit", 70, 400, 300, 100), s_exitFromGameOver));
     return true;
 }
 
@@ -33,7 +49,7 @@ bool GameOverState::OnExit() {
 
 void GameOverState::Render() {
     // Vẽ tất cả các nút
-    TextureManager::GetInstance()->Draw("gameover_background", 0, 0, 1280, 640);
+    TextureManager::GetInstance()->Draw("gameover_background", 0, 0, 1280, 720);
     for (MenuButton* button : buttons) {
         button->Draw();
     }

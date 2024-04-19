@@ -19,8 +19,8 @@ void FireSpell::Activate(Vector2D Begin_Position, Vector2D direction)
 void FireSpell::Draw()
 {
 	if (m_Animation != NULL) m_Animation->Draw(m_Transform->X, m_Transform->Y, m_Width, m_Height);
-	SDL_Rect box = m_Collider->Get();
-	SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
+	//SDL_Rect box = m_Collider->Get();
+	//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
 }
 
 void FireSpell::Update(float dt)
