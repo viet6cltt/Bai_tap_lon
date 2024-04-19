@@ -1,33 +1,176 @@
-﻿  Final_Boss.cpp
+﻿  ChoosePlayerState.cpp
 E:\Game\GameSDL\GameSDL2\GameObject.h(19,7): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  (compiling source file 'Final_Boss.cpp')
+  (compiling source file 'ChoosePlayerState.cpp')
   
 E:\Game\GameSDL\GameSDL2\GameObject.h(20,7): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  (compiling source file 'Final_Boss.cpp')
+  (compiling source file 'ChoosePlayerState.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Engine.h(42,13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'ChoosePlayerState.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Engine.h(43,13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'ChoosePlayerState.cpp')
   
 E:\Game\GameSDL\GameSDL2\Collider.h(22,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  (compiling source file 'Final_Boss.cpp')
+  (compiling source file 'ChoosePlayerState.cpp')
   
 E:\Game\GameSDL\GameSDL2\Collider.h(23,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  (compiling source file 'Final_Boss.cpp')
+  (compiling source file 'ChoosePlayerState.cpp')
   
-E:\Game\GameSDL\GameSDL2\Engine.h(39,13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  (compiling source file 'Final_Boss.cpp')
-  
-E:\Game\GameSDL\GameSDL2\Engine.h(40,13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  (compiling source file 'Final_Boss.cpp')
-  
-E:\Game\GameSDL\GameSDL2\Final_Boss.h(7,1): warning C4005: 'RUN_FORCE': macro redefinition
-  (compiling source file 'Final_Boss.cpp')
-  E:\Game\GameSDL\GameSDL2\FireSpell.h(6,1):
+E:\Game\GameSDL\GameSDL2\Enemy1.h(5,1): warning C4005: 'RUN_FORCE': macro redefinition
+  (compiling source file 'ChoosePlayerState.cpp')
+  E:\Game\GameSDL\GameSDL2\Skill_Hasagi.h(5,1):
   see previous definition of 'RUN_FORCE'
   
-E:\Game\GameSDL\GameSDL2\Final_Boss.cpp(105,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\Game\GameSDL\GameSDL2\Final_Boss.cpp(105,30): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\Game\GameSDL\GameSDL2\Final_Boss.cpp(255,54): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\Game\GameSDL\GameSDL2\Final_Boss.cpp(255,38): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\Game\GameSDL\GameSDL2\Final_Boss.cpp(265,54): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\Game\GameSDL\GameSDL2\Final_Boss.cpp(265,38): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\Game\GameSDL\GameSDL2\Final_Boss.cpp(388,41): warning C4018: '>=': signed/unsigned mismatch
-E:\Game\GameSDL\GameSDL2\Final_Boss.cpp(388,102): warning C4018: '<': signed/unsigned mismatch
+E:\Game\GameSDL\GameSDL2\Enemy_Boss1.h(6,1): warning C4005: 'RUN_FORCE': macro redefinition
+  (compiling source file 'ChoosePlayerState.cpp')
+  E:\Game\GameSDL\GameSDL2\Enemy1.h(5,1):
+  see previous definition of 'RUN_FORCE'
+  
+E:\Game\GameSDL\GameSDL2\Pyromancer.h(8,1): warning C4005: 'RUN_FORCE': macro redefinition
+  (compiling source file 'ChoosePlayerState.cpp')
+  E:\Game\GameSDL\GameSDL2\Enemy_Boss1.h(6,1):
+  see previous definition of 'RUN_FORCE'
+  
+E:\Game\GameSDL\GameSDL2\Final_Boss.h(8,1): warning C4005: 'RUN_FORCE': macro redefinition
+  (compiling source file 'ChoosePlayerState.cpp')
+  E:\Game\GameSDL\GameSDL2\Pyromancer.h(8,1):
+  see previous definition of 'RUN_FORCE'
+  
+  Engine.cpp
+E:\Game\GameSDL\GameSDL2\GameObject.h(19,7): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'Engine.cpp')
+  
+E:\Game\GameSDL\GameSDL2\GameObject.h(20,7): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'Engine.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Engine.h(42,13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'Engine.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Engine.h(43,13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'Engine.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Collider.h(22,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'Engine.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Collider.h(23,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'Engine.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Enemy1.h(5,1): warning C4005: 'RUN_FORCE': macro redefinition
+  (compiling source file 'Engine.cpp')
+  E:\Game\GameSDL\GameSDL2\Skill_Hasagi.h(5,1):
+  see previous definition of 'RUN_FORCE'
+  
+E:\Game\GameSDL\GameSDL2\Enemy_Boss1.h(6,1): warning C4005: 'RUN_FORCE': macro redefinition
+  (compiling source file 'Engine.cpp')
+  E:\Game\GameSDL\GameSDL2\Enemy1.h(5,1):
+  see previous definition of 'RUN_FORCE'
+  
+E:\Game\GameSDL\GameSDL2\Pyromancer.h(8,1): warning C4005: 'RUN_FORCE': macro redefinition
+  (compiling source file 'Engine.cpp')
+  E:\Game\GameSDL\GameSDL2\Enemy_Boss1.h(6,1):
+  see previous definition of 'RUN_FORCE'
+  
+E:\Game\GameSDL\GameSDL2\Final_Boss.h(8,1): warning C4005: 'RUN_FORCE': macro redefinition
+  (compiling source file 'Engine.cpp')
+  E:\Game\GameSDL\GameSDL2\Pyromancer.h(8,1):
+  see previous definition of 'RUN_FORCE'
+  
+  PlayState.cpp
+E:\Game\GameSDL\GameSDL2\GameObject.h(19,7): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'PlayState.cpp')
+  
+E:\Game\GameSDL\GameSDL2\GameObject.h(20,7): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'PlayState.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Collider.h(22,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'PlayState.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Collider.h(23,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'PlayState.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Engine.h(42,13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'PlayState.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Engine.h(43,13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'PlayState.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Enemy1.h(5,1): warning C4005: 'RUN_FORCE': macro redefinition
+  (compiling source file 'PlayState.cpp')
+  E:\Game\GameSDL\GameSDL2\Skill_Hasagi.h(5,1):
+  see previous definition of 'RUN_FORCE'
+  
+E:\Game\GameSDL\GameSDL2\Enemy_Boss1.h(6,1): warning C4005: 'RUN_FORCE': macro redefinition
+  (compiling source file 'PlayState.cpp')
+  E:\Game\GameSDL\GameSDL2\Enemy1.h(5,1):
+  see previous definition of 'RUN_FORCE'
+  
+E:\Game\GameSDL\GameSDL2\Pyromancer.h(8,1): warning C4005: 'RUN_FORCE': macro redefinition
+  (compiling source file 'PlayState.cpp')
+  E:\Game\GameSDL\GameSDL2\Enemy_Boss1.h(6,1):
+  see previous definition of 'RUN_FORCE'
+  
+E:\Game\GameSDL\GameSDL2\Final_Boss.h(8,1): warning C4005: 'RUN_FORCE': macro redefinition
+  (compiling source file 'PlayState.cpp')
+  E:\Game\GameSDL\GameSDL2\Pyromancer.h(8,1):
+  see previous definition of 'RUN_FORCE'
+  
+E:\Game\GameSDL\GameSDL2\PlayState.cpp(227,163): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\PlayState.cpp(227,129): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\PlayState.cpp(228,163): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\PlayState.cpp(228,129): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\PlayState.cpp(229,165): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\PlayState.cpp(229,134): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Warrior.cpp
+E:\Game\GameSDL\GameSDL2\GameObject.h(19,7): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'Warrior.cpp')
+  
+E:\Game\GameSDL\GameSDL2\GameObject.h(20,7): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'Warrior.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Collider.h(22,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'Warrior.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Collider.h(23,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'Warrior.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Engine.h(42,13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'Warrior.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Engine.h(43,13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  (compiling source file 'Warrior.cpp')
+  
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(19,16): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(26,16): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(196,12): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(234,20): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(285,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(285,29): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(305,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(305,29): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(351,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(351,37): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(356,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(356,37): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(373,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(373,37): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(377,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(377,37): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(394,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(394,37): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(398,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(398,37): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(415,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(415,37): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(419,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(419,37): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(597,68): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(597,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(638,57): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(638,41): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(642,57): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(642,41): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(650,95): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\Game\GameSDL\GameSDL2\Warrior.cpp(650,78): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
   GameSDL2.vcxproj -> E:\Game\GameSDL\GameSDL2\x64\Debug\GameSDL2.exe
