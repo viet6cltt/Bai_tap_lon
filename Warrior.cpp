@@ -34,8 +34,6 @@ Warrior::Warrior(Properties* props) : Character(props)
 	m_IsHurt = false;
 	m_IsSoundPlay = false;
 	m_Flip = SDL_FLIP_NONE;
-
-	m_skill_Dao_Pha_Thien_Mon = false;
 	m_FinishAttack = false;
 	
 
@@ -54,8 +52,8 @@ Warrior::Warrior(Properties* props) : Character(props)
 	m_HealingCooldown = 10;
 	m_CurrentHealingCooldown = 0;
 	m_GravityCooldown = 25;
-	m_GravityDamage = m_Damage / 30;
-	m_HasagiCooldown = 15;
+	m_GravityDamage = m_Damage / 35;
+	m_HasagiCooldown = 10;
 	m_CanUseGravity = true;
 	m_CanUseHasagi = true;
 	m_SlashCooldown = 20;
@@ -65,7 +63,7 @@ Warrior::Warrior(Properties* props) : Character(props)
 	
 	m_CanUseSlash = true;
 
-	m_SlideCooldown = 2;
+	m_SlideCooldown = 1;
 	m_CurrentSlideCooldown = 0;
 	m_CanSlide = true;
 	m_SlideCount = 0;
@@ -114,7 +112,7 @@ void Warrior::Draw()
 	}
 	
 	//Vector2D cam = Camera::GetInstance()->GetPosition();
-	//SDL_Rect box = m_Collider->Get();
+	SDL_Rect box = m_Collider->Get();
 	//attack box
 	if (m_attackCollider != NULL){
 		SDL_Rect attackbox = m_attackCollider->Get();
@@ -133,7 +131,7 @@ void Warrior::Draw()
 
 	//box.x -= cam.X;
 	//box.y -= cam.Y;
-	//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
+	SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
 
 	//skill icon
 	if (m_SlideIconAnimation != NULL)
@@ -184,6 +182,7 @@ void Warrior::Draw()
 
 void Warrior::Update(float dt)
 {
+	
 	Warrior_VoiceHanlder();
 
 	if (isAlive() == false) {
@@ -277,10 +276,10 @@ void Warrior::Update(float dt)
 	m_LastSafePosition.X = m_Transform->X;
 	m_Transform->X += m_RigidBody->Position().X;
 	if (m_Flip == SDL_FLIP_NONE) {
-		m_Collider->SetBuffer(-50, -60, 90, 70);
+		m_Collider->SetBuffer(-50, -65, 90, 80);
 	}
 	else {
-		m_Collider->SetBuffer(-40, -60, 90, 70);
+		m_Collider->SetBuffer(-40, -65, 90, 80);
 	}
 	m_Collider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Width);
 	
@@ -296,10 +295,10 @@ void Warrior::Update(float dt)
 	m_Transform->Y += m_RigidBody->Position().Y;
 	
 	if (m_Flip == SDL_FLIP_NONE) {
-		m_Collider->SetBuffer(-50, -60, 90, 70);
+		m_Collider->SetBuffer(-50, -65, 90, 80);
 	}
 	else {
-		m_Collider->SetBuffer(-40, -60, 90, 70);
+		m_Collider->SetBuffer(-40, -65, 90, 80);
 	}
 	
 	m_Collider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Width);
@@ -308,8 +307,8 @@ void Warrior::Update(float dt)
 		m_RigidBody->SetVelocity(m_RigidBody->Velocity().X, 0);
 	}
 	
-	m_Origin->X = m_Transform->X + m_Width / 2;
-	m_Origin->Y = m_Transform->Y + m_Height / 2;
+	m_Origin->X = m_Collider->Get().x + (float)m_Collider->Get().w / 2;
+	m_Origin->Y = m_Collider->Get().y + (float)m_Collider->Get().h / 2;
 
 	/*--------------xu li skill----------*/
 	//healing skill
@@ -580,7 +579,7 @@ void Warrior::GravitySkillHandler() {
 		m_CurrentGravityCooldown = 0;
 		m_CanUseGravity = true;
 	}
-	if (m_IsGravitySkill && m_CurrentGravityCooldown > 5) {
+	if (m_IsGravitySkill && m_CurrentGravityCooldown > 6) {
 		m_IsGravitySkill = false;
 		Mix_HaltChannel(2);
 		if (m_GravitySkillAnimation != NULL) {
@@ -647,7 +646,7 @@ void Warrior::SlashSkillHandler()
 
 void Warrior::HasagiSkillHandler(float dt) {
 	if (m_isSkill_Hasagi && m_CanUseHasagi) {
-		m_skill_Hasagi = new Skill_Hasagi(new Properties("skill_1", m_Transform->X + 40, m_Transform->Y, 64, 64), m_Damage);
+		m_skill_Hasagi = new Skill_Hasagi(new Properties("skill_1", m_Transform->X + 40, m_Transform->Y + 50, 64, 64), m_Damage * 6);
 		m_skill_Hasagi->setDamage(m_Damage);
 		m_skill_Hasagi->Activate(m_Position, Engine::GetInstance()->getMouse());
 		m_CanUseHasagi = false;
@@ -698,7 +697,10 @@ void Warrior::SlideSkillHandler() {
 		m_IsSlide = false;
 	}
 	if (m_IsSlide) {
-		m_RigidBody->ApplyForce(force * 6);
+		if (Player_type == 2) {
+			m_RigidBody->ApplyForce(force * 6);
+		}else m_RigidBody->ApplyForce(force * 4);
+		
 	}
 	if (m_CurrentSlideCooldown >= m_SlideCooldown) {
 		m_CanSlide = true;

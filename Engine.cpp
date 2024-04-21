@@ -12,35 +12,21 @@
 #include "PauseState.h"
 #include "PlayState.h"
 #include "MenuState.h"
-
-
-
-//#include "Camera.h"
-
-//#include "GameStateMachine.h"
-//#include "GameState.h"
-//#include "MenuState.h"
-
-//Map* map = nullptr;
-
 Engine* Engine::s_Instance = nullptr;
-//Warrior* player = nullptr;
-//MenuState* menu = nullptr;
 
-//MenuState* m_pMenuObj1 = nullptr;
-//MenuState* m_pMenuObj2 = nullptr;
 bool Engine::Init()
 {
 	m_scores = 0;
 	player_type = 0;
 	screen_type = 1;
+	m_Time = 0;
 	if (SDL_Init(SDL_INIT_VIDEO) != 0 && IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) != 0)
 	{
 		SDL_Log("Failed to initialize SDL: %s", SDL_GetError());
 		return false;
 	}
 
-	m_Window = SDL_CreateWindow("Everpath", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 1);
+	m_Window = SDL_CreateWindow("Everpath", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN);
 	if (m_Window == nullptr)
 	{
 		SDL_Log("Failed to creat Window: %s", SDL_GetError());
@@ -60,18 +46,17 @@ bool Engine::Init()
 	m_pGameStateMachine = new GameStateMachine();
 	m_pGameStateMachine->changeState(new MenuState());
 
-	
 	return m_IsRunning = true;
 }
 
 void Engine::Update()
 {
 	if(Input::GetInstance()->GetKeyDown(SDL_SCANCODE_LCTRL)&&Input::GetInstance()->GetKeyDown(SDL_SCANCODE_M)){
-		std::cout << "dang tang am";
+		//std::cout << "dang tang am";
 		SoundManager::GetInstance()->AdjustMasterVolume(5);
 	}
 	else if(Input::GetInstance()->GetKeyDown(SDL_SCANCODE_LCTRL) && Input::GetInstance()->GetKeyDown(SDL_SCANCODE_N)){
-		std::cout << "dang giam am";
+		//std::cout << "dang giam am";
 		SoundManager::GetInstance()->AdjustMasterVolume(-5);
 	}
 
@@ -79,35 +64,26 @@ void Engine::Update()
 	float dt = Timer::GetInstance()->GetDealtaTime();
 	//SDL_Log("%f", dt);
 	m_pGameStateMachine->Update(dt);
-	//menu->Update(dt);
-	//player->Update(dt);
 
 }
 
 void Engine::Render()
 {
-	//SDL_SetRenderDrawColor(m_Renderer, 124, 218, 254, 255); //set color
 	SDL_RenderClear(m_Renderer); //clear the window to blank
 	
-	//menu->Render();
+	
 	m_pGameStateMachine->Render();
-	//map->DrawMap();
-	//player->Draw(); //ve nhan vat chinh
 	SDL_RenderPresent(m_Renderer); //cap nhat man hinh
 }
 
 void Engine::Events()
 {
 	Input::GetInstance()->Listen();
-	/*if (Input::GetInstance()->GetLeftMouseButton()) {
-		m_pGameStateMachine->changState(new PlayState());
-	}*/
 }
 
 
 bool Engine::Clean()
 {
-	//menu->OnExit();
 	TextureManager::GetInstance()->Clean();
 	SDL_DestroyRenderer(m_Renderer);
 	SDL_DestroyWindow(m_Window);

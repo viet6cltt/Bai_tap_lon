@@ -20,6 +20,9 @@ bool GameOverState::OnEnter() {
             }
         }
     }
+
+    SoundManager::GetInstance()->Load("gameover_music", "assets\\gameover_music.mp3", SOUND_MUSIC);
+    SoundManager::GetInstance()->PlayMusic("gameover_music", -1);
     TextureManager::GetInstance()->Load("gameover_background", "assets\\gameoverstate_background.png");
 
     TextureManager::GetInstance()->Load("menu_quit", "assets\\Menu Buttons\\Large Buttons\\Large Buttons\\Exit Button.png");
@@ -28,13 +31,14 @@ bool GameOverState::OnEnter() {
     TextureManager::GetInstance()->Load("menu_menu", "assets\\Menu Buttons\\Large Buttons\\Large Buttons\\Menu Button.png");
     TextureManager::GetInstance()->Load("menu_menu_hover", "assets\\Menu Buttons\\Large Buttons\\Colored Large Buttons\\Menu  col_Button.png");
 
-    buttons.push_back(new MenuButton(new Properties("menu_menu", 70, 200, 300, 100), s_toMenu));
-    buttons.push_back(new MenuButton(new Properties("menu_quit", 70, 400, 300, 100), s_exitFromGameOver));
+    buttons.push_back(new MenuButton(new Properties("menu_menu", 70, 300, 300, 100), s_toMenu));
+    buttons.push_back(new MenuButton(new Properties("menu_quit", 70, 450, 300, 100), s_exitFromGameOver));
     return true;
 }
 
 bool GameOverState::OnExit() {
     printf("gameover on exit\n");
+    Mix_HaltMusic();
     TextureManager::GetInstance()->Drop("gameover_background");
     for (int i = 0; i < buttons.size(); i++) {
         buttons[i]->Clean();

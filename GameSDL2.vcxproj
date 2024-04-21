@@ -158,7 +158,6 @@
     <ClCompile Include="MenuButton.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="Obelysk.cpp" />
-    <ClCompile Include="PathFinder.cpp" />
     <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="Pyromancer.cpp" />

@@ -45,5 +45,6 @@ private:
 	SDL_Point* center;
 
 	std::string m_LastState;
+
 };
 

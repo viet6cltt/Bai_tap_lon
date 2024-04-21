@@ -15,7 +15,7 @@ Enemy1::Enemy1(Properties* props) : Enemy(props)
 	m_hasReceivedDamage["slash"] = false;
 	m_hasReceivedDamage["gravity"] = false;
 	m_hasReceivedDamage["hasagi"] = false;
-	m_Health = 4000;
+	m_Health = 5000;
 	m_Damage = 200;
 	m_IsRunning = false;
 
@@ -27,8 +27,10 @@ Enemy1::Enemy1(Properties* props) : Enemy(props)
 	center->y = m_Height / 2;
 
 	m_Flip = SDL_FLIP_NONE;
+	is_MapUpdated = false;
 
 	m_Collider = new Collider();
+	m_attackDetectCollider = new Collider();
 	//m_Collider->SetBuffer(-45, -40, 45, 40);
 	m_attackCollider = NULL;
 
@@ -44,12 +46,16 @@ void Enemy1::Draw()
 {
 	m_Animation->Draw(m_Transform->X, m_Transform->Y, m_Width, m_Height, m_Flip, center);
 	//Vector2D cam = Camera::GetInstance()->GetPosition();
-	//SDL_Rect box = m_Collider->Get();
+	SDL_Rect box = m_Collider->Get();
 	
 	/*if (m_attackCollider != NULL) {
 		SDL_Rect box1 = m_attackCollider->Get();
 		SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box1);
 	}*/
+	//if (m_attackDetectCollider != NULL) {
+	//	//SDL_Rect box1 = m_attackDetectCollider->Get();
+	//	//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box1);
+	//}
 	
 	//TextureManager::GetInstance()->Draw("enemy_bar", m_Transform->X + 70, m_Transform->Y + 43, 29, 5);
 	m_HealthBar->Draw();
@@ -111,21 +117,26 @@ void Enemy1::Update(float dt) {
 	m_RigidBody->Update(dt);
 	m_LastSafePosition.X = m_Transform->X;
 	m_Transform->X += m_RigidBody->Position().X;
-	m_Collider->SetBuffer(-58, -50, 110, 100);
+	m_Collider->SetBuffer(-58, -50, 118, 118);
 	m_Collider->Set(m_Transform->X,m_Transform->Y , 50, 50);
 
-	if (CollisionHandler::GetInstance()->MapCollision(m_Collider->Get())) {
+	/*if (CollisionHandler::GetInstance()->MapCollision(m_Collider->Get())) {
 		m_Transform->X = m_LastSafePosition.X;
-	}
+	}*/
 	m_RigidBody->Update(dt);
 	m_LastSafePosition.Y = m_Transform->Y;
 	m_Transform->Y += m_RigidBody->Position().Y;
+	m_Collider->SetBuffer(-58, -50, 118, 118);
 	m_Collider->Set(m_Transform->X, m_Transform->Y, 150, 150);
-	m_Collider->SetBuffer(0, 0, 0, 0);
+	
 
-	if (CollisionHandler::GetInstance()->MapCollision(m_Collider->Get())) {
+	m_attackDetectCollider->SetBuffer(-50, -40, 100, 90);
+	m_attackDetectCollider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
+
+
+	/*if (CollisionHandler::GetInstance()->MapCollision(m_Collider->Get())) {
 		m_Transform->Y = m_LastSafePosition.Y;
-	}
+	}*/
 
 	m_Origin->X = m_Transform->X + m_Width / 2;
 	m_Origin->Y = m_Transform->Y + m_Height / 2;
@@ -179,8 +190,6 @@ void Enemy1::AnimationState()
 	m_LastState = currentState;
 }
 
-
-
 void Enemy1::Clean()
 {
 	//TextureManager::GetInstance()->Drop("skeleton_run");
@@ -209,17 +218,21 @@ Collider* Enemy1::AttackZone(float dt) {
 
 void Enemy1::Follow_Warrior(Vector2D F)
 {
-	m_Position.X = m_Origin->X;
-	m_Position.Y = m_Origin->Y;
-	m_Direction = F - m_Position;
-	
-	m_Direction = m_Direction.Normalize();
-	
+	if (m_Collider != NULL) {
+		if (!is_MapUpdated) {
+			m_PathFinder = new PathFinder(Map::GetInstance()->get_Map(), m_Collider);
+			is_MapUpdated = true;
+		}
+		m_Position.X = m_Collider->Get().x + (float)m_Collider->Get().w / 2;
+		m_Position.Y = m_Collider->Get().y + (float)m_Collider->Get().h / 2;
+
+		m_Direction = m_PathFinder->getDirection(m_Collider, F);
+	}
 	m_IsRunning = true;
-	if (m_Direction.X > 0) {
+	if (F.X - m_Position.X > 0) {
 		m_Flip = SDL_FLIP_NONE;
 	}
-	else if (m_Direction.X < 0) {
+	else if (F.X - m_Position.X < 0) {
 		m_Flip = SDL_FLIP_HORIZONTAL;
 	}
 

@@ -8,7 +8,7 @@
 #include "PauseState.h"
 
 #define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 640
+#define SCREEN_HEIGHT 720
 class Engine
 {
 public:
@@ -46,6 +46,9 @@ public:
 
 	int getScores() { return m_scores; }
 	void setScores(int score) { m_scores = score; }
+
+	int getTime() { return m_Time; }
+	void setTime(int time) { m_Time = time; }
 	
 private:
 	Engine() {}
@@ -60,6 +63,7 @@ private:
 	int mouseX, mouseY;
 	int screen_type;
 	int player_type;
+	int m_Time;
 
 	
 };

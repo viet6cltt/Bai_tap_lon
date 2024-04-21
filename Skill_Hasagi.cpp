@@ -61,7 +61,6 @@ void Skill_Hasagi::Clean()
 	delete m_Animation;
 	delete m_RigidBody;
 
-	// Thiết lập lại các con trỏ thành nullptr
 	m_Collider = nullptr;
 	m_Animation = nullptr;
 	m_RigidBody = nullptr;

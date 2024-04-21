@@ -63,10 +63,11 @@ private:
 
 	Vector2D m_Position;
 
-	SDL_Rect m_Rect;
+	//SDL_Rect m_Rect;
 	Vector2D m_FollowDirection;
 	Vector2D m_Direction;
 	Vector2D m_attackDirection;
+	
 	float dt = 0;
 	SDL_Point* center;
 

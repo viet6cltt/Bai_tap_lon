@@ -9,7 +9,7 @@ class Skill_Hasagi : public RangedType
 public:
 	Skill_Hasagi(Properties* props,int damage);
 
-	void setDamage(int damage) { m_damage = damage * 3; }
+	void setDamage(int damage) { m_damage = damage * 6; }
 	int getDamage() { 
 			return m_damage;
 	}

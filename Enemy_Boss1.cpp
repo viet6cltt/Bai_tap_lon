@@ -15,8 +15,8 @@ Enemy_Boss1::Enemy_Boss1(Properties* props) : Enemy(props)
 	m_hasReceivedDamage["slash"] = false;
 	m_hasReceivedDamage["gravity"] = false;
 	m_hasReceivedDamage["hasagi"] = false;
-	m_Health = 4000;
-	m_Damage = 500;
+	m_Health = 7000;
+	m_Damage = 400;
 	m_IsRunning = false;
 	m_AttackBeginFrames = 4;
 	m_AttackFinishFrames = 5;
@@ -25,7 +25,7 @@ Enemy_Boss1::Enemy_Boss1(Properties* props) : Enemy(props)
 	hasFlipped = false;
 	//Boss1
 	TextureManager::GetInstance()->Load("boss1", "assets\\BringerOfDeath\\SpriteSheet\\BringerofDeathSpritSheet.png");
-	
+	is_MapUpdated = false;
 	m_IsAttacking = false;
 	
 	m_CanAttack = true;
@@ -41,6 +41,7 @@ Enemy_Boss1::Enemy_Boss1(Properties* props) : Enemy(props)
 	m_Flip = SDL_FLIP_NONE;
 
 	m_Collider = new Collider();
+	m_attackDetectCollider = new Collider();
 	//m_Collider->SetBuffer(-45, -40, 45, 40);
 	m_attackCollider = NULL;
 
@@ -53,24 +54,23 @@ Enemy_Boss1::Enemy_Boss1(Properties* props) : Enemy(props)
 
 void Enemy_Boss1::Draw()
 {
-	//std::cout << center->x << std::endl;
 	m_Animation->Draw(m_Transform->X, m_Transform->Y, m_Width, m_Height, m_Flip,NULL);
 	//Vector2D cam = Camera::GetInstance()->GetPosition();
-	SDL_Rect box = m_Collider->Get();
+	
 
-	/*if (m_attackCollider != NULL) {
+	if (m_attackCollider != NULL) {
 		SDL_Rect box1 = m_attackCollider->Get();
 		SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box1);
 	}
-*/
+
 	//TextureManager::GetInstance()->Draw("enemy_bar", m_Transform->X + 70, m_Transform->Y + 43, 29, 5);
 	if (m_HealthBar != NULL) {
 		m_HealthBar->Draw();
 	}
-	
-	//box.x -= cam.X;
-	//box.y -= cam.Y;
-	//SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
+	SDL_Rect box = m_Collider->Get();
+	SDL_Rect box1 = m_attackDetectCollider->Get();
+	SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box1);
+	SDL_RenderDrawRect(Engine::GetInstance()->GetRenderer(), &box);
 }
 
 void Enemy_Boss1::Update(float dt) {
@@ -104,8 +104,15 @@ void Enemy_Boss1::Update(float dt) {
 	}
 	
 	/*--------------------------xu li bi thuong-----------------------*/
+	if (m_hasReceivedDamage["hasagi"] == true) {
+		m_attackDirection.X = -m_attackDirection.X;
+		m_attackDirection.Y = -m_attackDirection.Y;
+		m_RigidBody->ApplyForce(m_attackDirection * 1);
+	}
 	if (m_IsHurt) {
 		m_RigidBody->UnSetForce();
+		m_IsRunning = false;
+		
 		if (m_IsAttacking) {
 			delete m_attackCollider;
 			m_attackCollider = NULL;
@@ -125,29 +132,33 @@ void Enemy_Boss1::Update(float dt) {
 	m_Transform->X += m_RigidBody->Position().X;
 	if (m_Flip == SDL_FLIP_NONE) {
 		m_Collider->SetBuffer(-160, -80, 200, 80);
+		m_attackDetectCollider->SetBuffer(-130, -60, 160, 50);
 	}
 	else {
 		m_Collider->SetBuffer(-40, -80, 200, 80);
+		m_attackDetectCollider->SetBuffer(0, -60, 160, 50);
 	}
 	m_Collider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
-	if (CollisionHandler::GetInstance()->MapCollision(m_Collider->Get())) {
+	/*if (CollisionHandler::GetInstance()->MapCollision(m_Collider->Get())) {
 		m_Transform->X = m_LastSafePosition.X;
-	}
+	}*/
 
 	m_RigidBody->Update(dt);
 	m_LastSafePosition.Y = m_Transform->Y;
 	m_Transform->Y += m_RigidBody->Position().Y;
 	if (m_Flip == SDL_FLIP_NONE) {
 		m_Collider->SetBuffer(-160, -80, 200, 80);
+		m_attackDetectCollider->SetBuffer(-130, -55, 140, 30);
 	}
 	else {
 		m_Collider->SetBuffer(-40, -80, 200, 80);
+		m_attackDetectCollider->SetBuffer(0, -55, 140, 30);
 	}
 	m_Collider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
-
-	if (CollisionHandler::GetInstance()->MapCollision(m_Collider->Get())) {
+	m_attackDetectCollider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
+	/*if (CollisionHandler::GetInstance()->MapCollision(m_Collider->Get())) {
 		m_Transform->Y = m_LastSafePosition.Y;
-	}
+	}*/
 	if (m_Health <= 0 && !m_IsDying) {
 		m_IsDying = true;
 		delete m_HealthBar;
@@ -228,39 +239,42 @@ void Enemy_Boss1::Clean(){
 
 }
 
-
-
 void Enemy_Boss1::Follow_Warrior(Vector2D F)
 {
-	//std::cout << F.X << " " << F.Y << std::endl;
-	m_Position.X = m_Origin->X;
-	m_Position.Y = m_Origin->Y;
 	
-	//printf("toa do cua quai: %f %f\n", m_Position.X, m_Position.Y);
-	m_Direction = F - m_Position;
-	//printf("toa do cua quai: %f %f\n", F.X, F.Y);
-	m_Direction = m_Direction.Normalize();
-	//printf("toa do cua nhan vat: %f %f\n", direction.X, direction.Y);
-	m_IsRunning = true;
-	
-	if (m_Direction.X > 0) {
-		m_Flip = SDL_FLIP_HORIZONTAL;
+	if (m_Collider != NULL) {
+		//std::cout << m_Collider->Get().w << " " << m_Collider->Get().h << std::endl;
+		if (!is_MapUpdated) {
+			m_PathFinder = new PathFinder(Map::GetInstance()->get_Map(), m_Collider);
+			is_MapUpdated = true;
+		}
+		m_Position.X = m_Collider->Get().x + (float)m_Collider->Get().w / 2;
+		m_Position.Y = m_Collider->Get().y + (float)m_Collider->Get().h / 2;
+
+		m_Direction = m_PathFinder->getDirection(m_Collider, F);
+		m_attackDirection = F - m_Collider->GetPosition();
+		m_attackDirection.Normalize();
 	}
-	else if (m_Direction.X < 0) {
+
+	m_IsRunning = true;
+	if (F.X - m_Position.X < 0) {
 		m_Flip = SDL_FLIP_NONE;
 	}
-	
+	else if (F.X - m_Position.X > 0) {
+		m_Flip = SDL_FLIP_HORIZONTAL;
+	}
+
 	if (m_Flip == SDL_FLIP_HORIZONTAL && !hasFlipped)
 	{
 		m_Transform->X += 2 * center->x - m_Width;
 		m_Origin->X = m_Transform->X + m_Width - center->x;
-		hasFlipped = true;  
+		hasFlipped = true;  // Đánh dấu rằng hình ảnh đã được lật
 	}
 	else if (m_Flip == SDL_FLIP_NONE && hasFlipped)
 	{
 		m_Transform->X -= 2 * center->x - m_Width;
 		m_Origin->X = m_Transform->X + center->x;
-		hasFlipped = false;  
+		hasFlipped = false;  // Đặt lại biến khi hình ảnh không được lật
 	}
 	else if (m_Flip == SDL_FLIP_NONE && !hasFlipped) {
 		m_Origin->X = m_Transform->X + center->x;
@@ -268,7 +282,7 @@ void Enemy_Boss1::Follow_Warrior(Vector2D F)
 	else {
 		m_Origin->X = m_Transform->X + m_Width - center->x;
 	}
-	
+
 	m_Origin->Y = m_Transform->Y + m_Height / 2;
 
 
@@ -302,7 +316,7 @@ void Enemy_Boss1::DyingHandler() {
 		m_IsHurt = false;
 	}
 	if (m_IsDying && m_Animation->getSpriteFrame() == 6 && m_Animation->getSpriteRow() == 5 && !m_FinishDying) {
-		std::cout << "het thuc";
+		//std::cout << "het thuc";
 		m_FinishDying = true;
 		m_IsDying = false;
 

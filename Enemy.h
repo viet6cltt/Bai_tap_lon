@@ -7,7 +7,7 @@
 #include "Collider.h"
 #include <map>
 #include "FireSpell.h"
-
+#include "PathFinder.h"
 
 
 class Enemy : public Character
@@ -79,6 +79,7 @@ public:
 	virtual Collider* AttackZone(float dt) = 0;
 	virtual Collider* getattackZone() { return m_attackCollider; }
 	bool getIsAttack() { return m_IsAttacking; }
+	Collider* getattackCollider() { return m_attackDetectCollider; }
 	Collider* getCollider() { return m_Collider; }
 	virtual void Follow_Warrior(Vector2D F) = 0;
 
@@ -99,6 +100,7 @@ protected:
 
 	Collider* m_attackCollider;
 
+	Collider* m_attackDetectCollider;
 	Collider* m_Collider;
 	Vector2D m_LastSafePosition;
 	Animation* m_Animation;
@@ -109,6 +111,9 @@ protected:
 
 	SDL_Rect m_Rect;
 	std::string m_LastState;
+
+	bool is_MapUpdated;
+	PathFinder* m_PathFinder;
 	
 };
 

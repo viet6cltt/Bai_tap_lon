@@ -102,9 +102,6 @@
     <ClCompile Include="ChoosePlayerState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PathFinder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="VictoryState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -224,10 +221,10 @@
     <ClInclude Include="ChoosePlayerState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PathFinder.h">
+    <ClInclude Include="VictoryState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VictoryState.h">
+    <ClInclude Include="PathFinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

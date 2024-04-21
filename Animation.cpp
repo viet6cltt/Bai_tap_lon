@@ -3,7 +3,6 @@
 #include <iostream>
 void Animation::Update()
 {
-	//std::cout << SDL_GetTicks() << std::endl;
 
 	/*if (m_StartTime == 0) {
 		Start();

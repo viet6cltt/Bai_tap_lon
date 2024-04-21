@@ -1,26 +1,52 @@
 ﻿#include "VictoryState.h"
 #include <fstream>
+#include <string>
+#include <sstream>
 const std::string VictoryState::s_victoryID = "VICTORY";
 bool VictoryState::OnEnter() {
     printf("victory  on enter\n");
 
     std::ifstream file;
     file.open("assets\\scores.txt");
+    std::string line;
     if (file.is_open()) {
+        //diem
         int n;
-        file >> n;
-        file.close();
-        if (n < Engine::GetInstance()->getScores()) {
-            std::ofstream file;
-            file.open("assets\\scores.txt", std::ios::out);
-            if (file.is_open()) {
-
-                file << Engine::GetInstance()->getScores();
-                file.close();
+        if (std::getline(file, line)) {
+            n = std::stoi(line);
+        }
+        int times = Engine::GetInstance()->getTime() / 1000;
+        //thoi gian
+        int minutes = 0, seconds = 0;
+        if (std::getline(file, line)) {
+            std::istringstream iss(line);
+            char ch;
+            iss >> minutes >> ch >> seconds;
+        }
+        if (minutes > times / 60) {
+            minutes = times / 60;
+            seconds = times % 60;
+        }
+        if (minutes == times / 60) {
+            if (seconds > times % 60) {
+                seconds = times % 60;
             }
         }
+        
+        file.close();
+        if (n < Engine::GetInstance()->getScores()) n = Engine::GetInstance()->getScores();
+        std::ofstream file;
+        file.open("assets\\scores.txt");
+        file << n;
+        file << "\n";
+        std::string new_time = std::to_string(minutes) + ":" + std::to_string(seconds);
+        file << new_time;
+        file.close();
     }
-    TextureManager::GetInstance()->Load("victory_background", "assets\\victory_background.jpg");
+    TextureManager::GetInstance()->Load("victory_background", "assets\\victory_background.png");
+    SoundManager::GetInstance()->Load("victory_music", "assets\\victory_music.mp3", SOUND_MUSIC);
+    SoundManager::GetInstance()->PlayMusic("victory_music",-1);
+
 
     TextureManager::GetInstance()->Load("menu_quit", "assets\\Menu Buttons\\Large Buttons\\Large Buttons\\Exit Button.png");
     TextureManager::GetInstance()->Load("menu_quit_hover", "assets\\Menu Buttons\\Large Buttons\\Colored Large Buttons\\Exit  col_Button.png");
@@ -35,6 +61,7 @@ bool VictoryState::OnEnter() {
 
 bool VictoryState::OnExit() {
     printf("victory on exit\n");
+    Mix_HaltMusic();
     TextureManager::GetInstance()->Drop("victory_background");
     for (int i = 0; i < buttons.size(); i++) {
         buttons[i]->Clean();
@@ -48,7 +75,6 @@ bool VictoryState::OnExit() {
 }
 
 void VictoryState::Render() {
-    // Vẽ tất cả các nút
     TextureManager::GetInstance()->Draw("victory_background", 0, 0, 1280, 720);
     for (MenuButton* button : buttons) {
         button->Draw();
@@ -56,7 +82,6 @@ void VictoryState::Render() {
 }
 
 void VictoryState::Update(float dt) {
-    // Cập nhật trạng thái của tất cả các nút
     for (MenuButton* button : buttons) {
         button->Update(dt);
     }

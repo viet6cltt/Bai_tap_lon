@@ -54,7 +54,9 @@ private:
 	
 	int m_Score;
 
+	int m_TimeBegin;
 	double m_SpawnTimer;
+	bool is_FinishLv;
 };
 
 

@@ -15,15 +15,14 @@
 #define MAX_HEALTH_PLAYER2 3000
 #define ATTACK_RATE_PLAYER1 40
 #define ATTACK_RATE_PLAYER2 70
-#define DAMAGE_PLAYER1 150
-#define DAMAGE_PLAYER2 300
+#define DAMAGE_PLAYER1 500
+#define DAMAGE_PLAYER2 800
 #define RUN_FORCE_PLAYER1 4.0f
 #define RUN_FORCE_PLAYER2 3.0f
 
 class Warrior : public Character
 {
 public:
-
 	Warrior(Properties* props);
 	virtual void Draw();
 	virtual void Clean();
@@ -117,8 +116,6 @@ private:
 	bool m_CanAttack;
 	bool m_hasDealtDamage;
 	bool m_FinishAttack;
-
-	bool m_skill_Dao_Pha_Thien_Mon;
 
 	float m_AttackTime;
 

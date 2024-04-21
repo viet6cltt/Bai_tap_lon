@@ -39,5 +39,6 @@ public:
 
 private:
     std::vector<MenuButton*> buttons;  // Danh sách các nút
-    int highest_scores;
+    std::string highest_scores;
+    std::string record_time;
 };

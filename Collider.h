@@ -19,8 +19,8 @@ public:
 	}
 	inline Vector2D GetPosition() {
 		Vector2D m_Position;
-		m_Position.X = m_Box.x;
-		m_Position.Y = m_Box.y;
+		m_Position.X = m_Box.x + m_Box.w/2;
+		m_Position.Y = m_Box.y + m_Box.h/2;
 		return m_Position;
 	}
 

@@ -2,9 +2,15 @@
 
 Pyromancer::Pyromancer(Properties* props) : Enemy(props)
 {
+	m_hasReceivedDamage["normal"] = false;
+	m_hasReceivedDamage["slash"] = false;
+	m_hasReceivedDamage["gravity"] = false;
+	m_hasReceivedDamage["hasagi"] = false;
 	m_Health = 4000;
-	m_Damage = 200;
+	m_Damage = 150;
 	m_IsRunning = false;
+
+	m_FireSpell = NULL;
 
 	m_IsAttacking = false;
 	m_CanAttack = true;
@@ -22,6 +28,8 @@ Pyromancer::Pyromancer(Properties* props) : Enemy(props)
 	m_Flip = SDL_FLIP_NONE;
 
 	m_Collider = new Collider();
+	m_attackDetectCollider = new Collider();
+	is_MapUpdated = false;
 	//m_Collider->SetBuffer(-45, -40, 45, 40);
 
 	m_RigidBody = new RigidBody();
@@ -70,7 +78,14 @@ void Pyromancer::Update(float dt)
 	if (!m_IsAttacking && !m_IsHurt &&!m_IsDying) m_RigidBody->ApplyForce(m_Direction * RUN_FORCE);
 
 	/*--------------------------xu li bi thuong-----------------------*/
+	if (m_hasReceivedDamage["hasagi"] == true) {
+		m_attackDirection.X = -m_attackDirection.X;
+		m_attackDirection.Y = -m_attackDirection.Y;
+		m_RigidBody->ApplyForce(m_attackDirection * 1);
+	}
 	if (m_IsHurt) {
+		m_IsRunning = false;
+		m_IsAttacking = false;
 		m_RigidBody->UnSetForce();
 		if (m_IsAttacking) {
 			delete m_attackCollider;
@@ -87,7 +102,7 @@ void Pyromancer::Update(float dt)
 	m_RigidBody->Update(dt);
 	m_LastSafePosition.X = m_Transform->X;
 	m_Transform->X += m_RigidBody->Position().X;
-	m_Collider->SetBuffer(-24, -30, 48, 40);
+	m_Collider->SetBuffer(-24, -30, 48, 48);
 	m_Collider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
 
 	if (CollisionHandler::GetInstance()->MapCollision(m_Collider->Get())) {
@@ -98,13 +113,17 @@ void Pyromancer::Update(float dt)
 	m_RigidBody->Update(dt);
 	m_LastSafePosition.Y = m_Transform->Y;
 	m_Transform->Y += m_RigidBody->Position().Y;
-	m_Collider->SetBuffer(-24, -30, 48, 40);
+	m_Collider->SetBuffer(-24, -30, 48, 48);
 	m_Collider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
-	
+	//std::cout << m_Collider->Get().w << " " << m_Collider->Get().h << std::endl;
+	m_attackDetectCollider->SetBuffer(-24, -30, 48, 40);
+	m_attackDetectCollider->Set(m_Transform->X, m_Transform->Y, m_Width, m_Height);
 
 	if (CollisionHandler::GetInstance()->MapCollision(m_Collider->Get())) {
 		m_Transform->Y = m_LastSafePosition.Y;
 	}
+
+	
 
 	m_Origin->X = m_Transform->X + m_Width / 2;
 	m_Origin->Y = m_Transform->Y + m_Height / 2;
@@ -130,6 +149,7 @@ void Pyromancer::Update(float dt)
 
 void Pyromancer::AnimationState()
 {
+	//std::cout << m_Animation->getID() << "\n";
 	std::string currentState;
 	//idle
 	if (m_Animation != NULL) {
@@ -181,27 +201,31 @@ void Pyromancer::AnimationState()
 
 void Pyromancer::Follow_Warrior(Vector2D F)
 {
-	m_Position.X = m_Origin->X;
-	m_Position.Y = m_Origin->Y;
-	m_Direction = F - m_Position;
-	m_attackDirection = F - m_Position;
+	if (m_Collider != NULL) {
+		if (!is_MapUpdated) {
+			m_PathFinder = new PathFinder(Map::GetInstance()->get_Map(), m_Collider);
+			is_MapUpdated = true;
+		}
+		m_Position.X = m_Collider->Get().x + (float)m_Collider->Get().w / 2;
+		m_Position.Y = m_Collider->Get().y + (float)m_Collider->Get().h / 2;
+
+		m_Direction = m_PathFinder->getDirection(m_Collider, F);
+	}
+	m_IsRunning = true;
+	m_attackDirection = { F.X - m_Position.X ,F.Y - m_Position.Y };
 	m_attackDirection.Normalize();
-
-	if (m_Direction.Length() <= 150) {
-		m_Direction = m_Direction.Normalize();
-		m_Direction.X = -m_Direction.X;
-		m_Direction.Y = -m_Direction.Y;
-	}
-	else {
-		m_Direction = m_Direction.Normalize();
-	}
-	
-
-	if (m_Direction.X > 0) {
+	if (F.X - m_Position.X > 0) {
 		m_Flip = SDL_FLIP_NONE;
 	}
-	else if (m_Direction.X < 0) {
+	else if (F.X - m_Position.X < 0) {
 		m_Flip = SDL_FLIP_HORIZONTAL;
+	}
+	Vector2D distance = { F.X - m_Position.X ,F.Y - m_Position.Y };
+	if (distance.Length() < 150) {
+		m_Direction.X = -m_Direction.X;
+		m_Direction.Y = -m_Direction.Y;
+		if (m_Flip == SDL_FLIP_NONE) m_Flip = SDL_FLIP_HORIZONTAL;
+		else m_Flip = SDL_FLIP_NONE;
 	}
 
 }

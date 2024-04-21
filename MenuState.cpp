@@ -11,11 +11,13 @@ bool MenuState::OnEnter() {
 
     FontManager::GetInstance()->LoadFont("highest_scores", "assets\\ExpressionPro.ttf", 40);
     FontManager::GetInstance()->LoadFont("current_highest_scores", "assets\\ExpressionPro.ttf", 40);
+    FontManager::GetInstance()->LoadFont("best_time", "assets\\ExpressionPro.ttf", 40);
+    FontManager::GetInstance()->LoadFont("current_best_time", "assets\\ExpressionPro.ttf", 40);
     std::ifstream file;
     file.open("assets\\scores.txt");
     if (file.is_open()) {
-        std::cout << "mo duoc ";
-        file >> highest_scores;
+        std::getline(file, highest_scores);
+        std::getline(file, record_time);
     }
     file.close();
     
@@ -35,9 +37,9 @@ bool MenuState::OnEnter() {
     TextureManager::GetInstance()->Load("menu_quit", "assets\\Menu Buttons\\Large Buttons\\Large Buttons\\Exit Button.png");
     TextureManager::GetInstance()->Load("menu_quit_hover", "assets\\Menu Buttons\\Large Buttons\\Colored Large Buttons\\Exit  col_Button.png");
 
-    buttons.push_back(new MenuButton(new Properties("menu_play", 500, 250, 300, 100), s_menuToChoosePlayer));
-    buttons.push_back(new MenuButton(new Properties("menu_control", 500, 400, 300, 100), s_menuToGuide));
-    buttons.push_back(new MenuButton(new Properties("menu_quit", 880, 400, 300, 100), s_exitFromMenu));
+    buttons.push_back(new MenuButton(new Properties("menu_play", 600, 250, 300, 100), s_menuToChoosePlayer));
+    buttons.push_back(new MenuButton(new Properties("menu_control", 600, 400, 300, 100), s_menuToGuide));
+    buttons.push_back(new MenuButton(new Properties("menu_quit", 950, 400, 300, 100), s_exitFromMenu));
     return true;
 }
 
@@ -63,7 +65,9 @@ void MenuState::Render() {
         button->Draw();
     }
     FontManager::GetInstance()->RenderText("highest_scores", "HIGHEST SCORES: " , 900, 600, {255,0,255,255});
-    FontManager::GetInstance()->RenderText("current_highest_scores", std::to_string(highest_scores).c_str(),1200 , 600, { 255,0,255,255 });
+    FontManager::GetInstance()->RenderText("current_highest_scores", highest_scores.c_str(),1200 , 600, { 255,0,255,255 });
+    FontManager::GetInstance()->RenderText("best_time", "BEST TIME: ", 900, 640, { 255,0,255,255 });
+    FontManager::GetInstance()->RenderText("current_best_time", record_time.c_str(), 1100, 640, { 255,0,255,255 });
 }
 
 void MenuState::Update(float dt) {

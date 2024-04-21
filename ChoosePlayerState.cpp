@@ -44,7 +44,7 @@ void ChoosePlayerState::Render()
 	TextureManager::GetInstance()->Draw("chooseplayer_background", 0, 0, 1280, 720);
 	TextureManager::GetInstance()->Draw("player1_icon", 100, 40, 452, 579);
 	TextureManager::GetInstance()->Draw("player2_icon", 728, 40, 452, 579);
-	FontManager::GetInstance()->RenderText("player_Name", " adsda", 400, 10, { 255,255,255,255 });
+	FontManager::GetInstance()->RenderText("player_Name", " CHOOSE YOUR CHARACTER", 400, 10, { 255,255,255,255 });
 	for (int i = 0; i < m_buttons.size(); i++) {
 		m_buttons[i]->Draw();
 	}

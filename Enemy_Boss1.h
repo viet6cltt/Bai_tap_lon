@@ -3,7 +3,7 @@
 #include "HealthBar.h"
 
 
-#define RUN_FORCE 0.7f
+#define RUN_FORCE 0.85f
 
 class Enemy_Boss1 : public Enemy
 {
@@ -49,6 +49,7 @@ private:
 
 	Vector2D m_Position;
 
+	Vector2D m_attackDirection;
 	SDL_Rect m_Rect;
 	Vector2D m_FollowDirection;
 	Vector2D m_Direction;

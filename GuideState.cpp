@@ -20,7 +20,7 @@ void GuideState::Update(float dt)
 
 void GuideState::Render()
 {
-	TextureManager::GetInstance()->Draw("guide_background", 0, 0, 1280, 640);
+	TextureManager::GetInstance()->Draw("guide_background", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	TextureManager::GetInstance()->Draw("guide", 256, 40, 768, 560);
 	for (int i = 0; i < m_buttons.size(); i++) {
 		m_buttons[i]->Draw();
