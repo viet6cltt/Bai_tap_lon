@@ -12,13 +12,17 @@ Các tính năng của game:
 
 -Xử lí va chạm tốt, hoạt ảnh mượt mà
 
--Các hoạt ảnh và vùng tấn công được xử lí một cách chính xác theo từng frame
+-Có cơ chế chọn nhân vật
+
+-Áp dụng và chỉnh sửa thuật toán Dijkstra vào trong việc tìm đường đi ngắn nhất, với quái có kích thước lớn
+
+-Các hoạt ảnh và vùng tấn công được xử lí bằng kĩ thuật Hitbox một cách chính xác theo từng frame
 
 -Xử lí bàn phím, chuột
 
 -Âm nhạc và hiệu ứng âm thanh được xử lí tốt
 
--Xuất nhập file, lưu số điểm cao nhất của người chơi 
+-Xuất nhập file, lưu số điểm và thời gian chiến thắng tốt nhất của người chơi 
 
 
-Ngưỡng điểm mà em mong muốn: 8
+Ngưỡng điểm mà em mong muốn: 8.5 - 9
